@@ -2,87 +2,90 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>متجر سيارات ببجي</title>
-
+<title>متجر ببجي</title>
 <style>
 body {
-    background: #0f2027;
-    color: white;
-    text-align: center;
-    font-family: Tahoma;
+  font-family: Arial;
+  background: linear-gradient(135deg,#020617,#0f172a);
+  color: white;
+  text-align: center;
 }
 
-.shop {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 30px;
+h1 {
+  color: gold;
 }
 
 .card {
-    background: #1c1c1c;
-    padding: 20px;
-    border-radius: 10px;
-    width: 150px;
+  background:#1f2937;
+  padding:20px;
+  border-radius:20px;
+  width:250px;
+  margin:auto;
+  box-shadow:0 0 15px black;
+  transition:0.3s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow:0 0 25px gold;
+}
+
+img {
+  width:100%;
+  border-radius:15px;
 }
 
 button {
-    background: green;
-    color: white;
-    padding: 10px;
-    border: none;
-    cursor: pointer;
+  background:green;
+  color:white;
+  border:none;
+  padding:12px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.balance {
+  margin:20px;
+  font-size:20px;
 }
 </style>
-
 </head>
 
 <body>
 
-<h1>🎮 متجر سيارات ببجي</h1>
-<h2>رصيدك: <span id="coins">1000</span> 💰</h2>
+<h1>🚗 متجر ببجي</h1>
 
-<div class="shop">
-
-<div class="card">
-<h3>سيارة بكي</h3>
-<p>300 عملة</p>
-<button onclick="buyCar(300)">شراء</button>
+<div class="balance">
+💰 رصيدك: <span id="coins">1000</span>
 </div>
 
 <div class="card">
-<h3>سيارة سبورت</h3>
-<p>500 عملة</p>
-<button onclick="buyCar(500)">شراء</button>
+<img src="https://i.imgur.com/8Km9tLL.png">
+<h2>Buggy</h2>
+<p>السعر: 50 عملة</p>
+<button onclick="buy()">شراء</button>
 </div>
 
-</div>
+<audio id="sound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
 
 <script>
-// نخلي الكود يشتغل بعد ما الصفحة تحمل
-window.onload = function () {
+let coins = localStorage.getItem("coins") || 1000;
+document.getElementById("coins").innerText = coins;
 
-    let coins = localStorage.getItem("coins");
+function buy(){
+  let price = 50;
+  coins = parseInt(coins);
 
-    if (coins === null) {
-        coins = 1000;
-        localStorage.setItem("coins", coins);
-    }
-
+  if(coins >= price){
+    coins -= price;
+    localStorage.setItem("coins", coins);
     document.getElementById("coins").innerText = coins;
-
-    window.buyCar = function(price) {
-        coins = parseInt(coins);
-
-        if (coins >= price) {
-            coins -= price;
-            localStorage.setItem("coins", coins);
-            document.getElementById("coins").innerText = coins;
-            alert("تم الشراء ✅");
-        } else {
-            alert("رصيدك ما يكفي ❌");
-        }
-    }
+    document.getElementById("sound").play();
+    alert("✅ تم الشراء");
+  } else {
+    alert("❌ رصيدك ما يكفي");
+  }
 }
 </script>
 
