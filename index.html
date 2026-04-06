@@ -1,2 +1,234 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUBG Mobile - متجر المركبات الملكي</title>
+    <style>
+        :root {
+            --primary: #f59e0b;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+        }
 
-عت
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* الهيدر الاحترافي */
+        header {
+            width: 100%;
+            background: linear-gradient(180deg, rgba(245, 158, 11, 0.2) 0%, rgba(15, 23, 42, 0) 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
+        .balance-card {
+            background: var(--card-bg);
+            padding: 15px 40px;
+            border-radius: 50px;
+            border: 2px solid var(--primary);
+            margin-top: 20px;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: inline-block;
+        }
+
+        #balance { color: var(--primary); font-weight: bold; }
+
+        /* شبكة المنتجات */
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            width: 90%;
+            max-width: 1200px;
+            padding: 40px 0;
+        }
+
+        .item-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #334155;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .item-card:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .item-image-container {
+            height: 200px;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* لضمان عدم خروج الصورة الكبيرة */
+            background-image: linear-gradient(45deg, #1e293b, #0f172a);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* تجعل الصورة تملأ الحاوية مع الحفاظ على الأبعاد */
+            transition: transform 0.3s ease;
+        }
+
+        .item-card:hover .item-image {
+            transform: scale(1.1); /* تأثير زووم بسيط عند التحويم */
+        }
+
+        .item-info {
+            padding: 20px;
+            text-align: center;
+            flex-grow: 1; /* لتوزيع المساحة المتبقية بالتساوي */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .item-name { font-size: 1.3rem; margin: 10px 0; }
+
+        .price-box {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+            align-self: center; /* لتمركز صندوق السعر */
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: var(--primary);
+            color: #000;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .buy-btn:hover { background: #fbbf24; }
+        .buy-btn:active { transform: scale(0.95); }
+
+        /* تنبيهات مخصصة */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            display: none;
+            animation: slideIn 0.5s ease;
+            z-index: 1000; /* لضمان ظهور التنبيه فوق كل شيء */
+        }
+
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>PUBG MOBILE LUXURY 🏎️</h1>
+        <div class="balance-card">
+            رصيدك الحالي: <span id="balance">1000</span> <small>UC</small>
+        </div>
+    </header>
+
+    <div class="shop-grid" id="shop">
+        </div>
+
+    <div id="toast" class="toast">تمت عملية الشراء بنجاح! ✅</div>
+
+    <script>
+        // بيانات السيارات المعدلة بروابط صور
+        // ملاحظة: استبدل الروابط أدناه بروابط صور سيارات ببجي حقيقية تريدها.
+        const cars = [
+            { id: 1, name: "تسلا رودستر - الإصدار الذهبي", price: 50, image: "https://w0.peakpx.com/wallpaper/403/182/HD-wallpaper-tesla-roadster-golden-version-electric-car-sports-car-golden-tesla.jpg" },
+            { id: 2, name: "لامبورغيني أفينتادور", price: 150, image: "https://w0.peakpx.com/wallpaper/121/101/HD-wallpaper-lamborghini-aventador-sports-car-supercar-black-lamborghini.jpg" },
+            { id: 3, name: "داسيا - تنين النار", price: 80, image: "https://w0.peakpx.com/wallpaper/241/831/HD-wallpaper-pubg-mobile-dacia-dragon-flame-skin-pubg-mobile-skins.jpg" },
+            { id: 4, name: "مكلارين P1", price: 200, image: "https://w0.peakpx.com/wallpaper/601/402/HD-wallpaper-mclaren-p1-sports-car-supercar-black-mclaren.jpg" },
+            { id: 5, name: "يو أي زد - الوحش", price: 60, image: "https://w0.peakpx.com/wallpaper/931/201/HD-wallpaper-pubg-mobile-uaz-monster-skin-pubg-mobile-skins.jpg" },
+            { id: 6, name: "دراجة الشبح", price: 30, image: "https://w0.peakpx.com/wallpaper/101/301/HD-wallpaper-pubg-mobile-ghost-motorcycle-skin-pubg-mobile-skins.jpg" }
+        ];
+
+        // جلب الرصيد من ذاكرة المتصفح أو وضعه 1000 كافتراضي
+        let currentBalance = localStorage.getItem('pubg_balance') ? 
+                             parseInt(localStorage.getItem('pubg_balance')) : 1000;
+
+        const balanceEl = document.getElementById('balance');
+        const shopEl = document.getElementById('shop');
+
+        function updateUI() {
+            balanceEl.innerText = currentBalance;
+            localStorage.setItem('pubg_balance', currentBalance);
+        }
+
+        function showToast(msg, color = "#10b981") {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.backgroundColor = color;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+
+        function buy(price, name) {
+            if (currentBalance >= price) {
+                currentBalance -= price;
+                updateUI();
+                showToast(`تم شراء ${name} بنجاح!`);
+            } else {
+                showToast("عذراً، رصيدك غير كافٍ ❌", "#ef4444");
+            }
+        }
+
+        // بناء المتجر تلقائياً مع استخدام وسم الصورة <img>
+        cars.forEach(car => {
+            shopEl.innerHTML += `
+                <div class="item-card">
+                    <div class="item-image-container">
+                        <img src="${car.image}" alt="${car.name}" class="item-image">
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">${car.name}</div>
+                        <div class="price-box">${car.price} UC</div>
+                        <button class="buy-btn" onclick="buy(${car.price}, '${car.name}')">امتلاك الآن</button>
+                    </div>
+                </div>
+            `;
+        });
+
+        updateUI();
+    </script>
+</body>
+</html>
