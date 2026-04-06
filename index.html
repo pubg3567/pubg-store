@@ -3,194 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>معرض سيارات PUBG الاحترافي</title>
+    <title>متجر سيارات PUBG Mobile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-gold: #f39c12;
-            --bg-dark: #0a0a0a;
-            --card-bg: #1a1a1a;
-            --success-green: #2ecc71;
+            --primary: #ffb100;
+            --accent: #ff4d4d;
+            --bg-dark: #0f1218;
+            --card-bg: rgba(255, 255, 255, 0.05);
         }
 
-        body { 
-            font-family: 'Cairo', sans-serif; 
-            background-color: var(--bg-dark); 
-            color: white; 
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at top, #1e2530 0%, #0f1218 100%);
+            color: white;
             margin: 0;
             padding-bottom: 50px;
         }
 
-        .header { 
-            background: #111; 
-            padding: 30px; 
-            border-bottom: 4px solid var(--primary-gold); 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-
-        .balance-container {
-            background: rgba(243, 156, 18, 0.1);
-            display: inline-block;
-            padding: 10px 25px;
-            border-radius: 50px;
-            border: 1px solid var(--primary-gold);
-            margin-top: 10px;
-        }
-
-        .balance-box { font-size: 28px; color: var(--primary-gold); font-weight: bold; }
-
-        .container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 25px; 
-            padding: 40px;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .card { 
-            background: var(--card-bg); 
-            border-radius: 20px; 
-            padding: 20px; 
-            text-align: center;
-            border: 1px solid #333; 
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card:hover { 
-            transform: translateY(-15px); 
-            border-color: var(--primary-gold);
-            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.2);
-        }
-
-        .card img { 
-            width: 100%; 
-            height: 160px;
-            object-fit: contain;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
-            margin-bottom: 15px;
-        }
-
-        .card h3 { margin: 10px 0; font-size: 22px; color: #fff; }
-
-        .price-tag { 
+        .navbar {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 5%;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            gap: 8px;
-            color: var(--success-green); 
-            font-size: 22px; 
-            font-weight: bold;
-            margin-bottom: 15px;
+            border-bottom: 2px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
         }
 
-        button { 
-            background: linear-gradient(45deg, #f39c12, #e67e22);
-            border: none; 
-            padding: 12px; 
-            border-radius: 12px; 
-            color: white; 
-            cursor: pointer; 
-            font-weight: bold; 
-            width: 100%; 
-            font-size: 16px;
+        .logo { font-size: 24px; font-weight: 900; color: var(--primary); text-transform: uppercase; }
+
+        .wallet-container {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .hero { padding: 40px 20px; text-align: center; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; color: #fff; }
+
+        .shop-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(255, 177, 0, 0.2);
+        }
+
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-content { padding: 20px; }
+        .card-title { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
+        
+        .price-tag {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .buy-btn {
+            background: var(--primary);
+            color: #000;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            border-radius: 12px;
+            font-weight: 900;
+            cursor: pointer;
             transition: 0.3s;
         }
 
-        button:hover { opacity: 0.9; transform: scale(1.02); }
-        button:active { transform: scale(0.98); }
+        .buy-btn:hover { background: #fff; transform: scale(1.02); }
+        .buy-btn:active { transform: scale(0.98); }
 
-        /* تنبيهات مخصصة */
-        .toast {
+        /* تأثيرات الإشعارات */
+        .notification {
             position: fixed;
             bottom: 20px;
-            right: 20px;
-            background: var(--success-green);
+            left: 50%;
+            transform: translateX(-50%);
             padding: 15px 30px;
             border-radius: 10px;
             display: none;
-            animation: slideIn 0.5s ease;
+            z-index: 2000;
+            font-weight: bold;
         }
-
-        @keyframes slideIn { from {right: -100px; opacity: 0;} to {right: 20px; opacity: 1;} }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>مـعرض سـيارات PUBG Mobile</h1>
-    <div class="balance-container">
-        <div class="balance-box">رصيدك: <span id="balance">5000</span> <small>UC</small></div>
+    <nav class="navbar">
+        <div class="logo">PUBG CARS STORE</div>
+        <div class="wallet-container">
+            💰 الرصيد: <span id="balance">1000</span> UC
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1>كراج السيارات النادرة</h1>
+        <p>اختر سيارتك المفضلة وانطلق في ساحة المعركة</p>
     </div>
-</div>
 
-<div class="container" id="cars-container">
-    </div>
-
-<div id="toast" class="toast">تمت عملية الشراء بنجاح!</div>
-
-<script>
-    // قائمة السيارات الحقيقية من البكجات
-    const cars = [
-        { name: "Dacia - اليقطين", img: "https://www.pubgmobile.com/images/event/car_skin/car1.png" },
-        { name: "UAZ - Godzilla", img: "https://www.pubgmobile.com/images/event/car_skin/car2.png" },
-        { name: "Koenigsegg Jesko", img: "https://www.pubgmobile.com/images/event/car_skin/car3.png" },
-        { name: "McLaren 570S", img: "https://www.pubgmobile.com/images/event/car_skin/car4.png" },
-        { name: "Lamborghini Aventador", img: "https://www.pubgmobile.com/images/event/car_skin/car5.png" },
-        { name: "Aston Martin DBS", img: "https://www.pubgmobile.com/images/event/car_skin/car6.png" },
-        { name: "Dodge Challenger", img: "https://www.pubgmobile.com/images/event/car_skin/car7.png" },
-        { name: "Pagani Imola", img: "https://www.pubgmobile.com/images/event/car_skin/car8.png" },
-        { name: "Bugatti La Voiture Noire", img: "https://www.pubgmobile.com/images/event/car_skin/car9.png" },
-        { name: "Bentley Mulliner", img: "https://www.pubgmobile.com/images/event/car_skin/car10.png" }
-    ];
-
-    // استرجاع الرصيد من ذاكرة المتصفح أو البدء بـ 5000
-    let currentBalance = localStorage.getItem('uc_balance') ? parseInt(localStorage.getItem('uc_balance')) : 5000;
-    document.getElementById('balance').innerText = currentBalance;
-
-    const container = document.getElementById('cars-container');
-
-    // توليد البطاقات تلقائياً مع زيادة السعر 60 لكل سيارة
-    cars.forEach((car, index) => {
-        const price = 60 + (index * 60); // أول سيارة 60، الثانية 120، الثالثة 180...
-        
-        const cardHtml = `
-            <div class="card">
-                <img src="https://img.icons8.com/color/160/sports-car.png" alt="car"> 
-                <h3>${car.name}</h3>
-                <div class="price-tag">${price} UC</div>
-                <button onclick="buyItem(${price}, '${car.name}')">شراء من البكج</button>
+    <div class="shop-container">
+        <div class="card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0N9r5vHbe9xXWpZ98Y6YtWnU-5uK39x2_OQ&s" alt="Dacia">
+            <div class="card-content">
+                <div class="card-title">داسيا - اليقطين المسحور</div>
+                <div class="price-tag">60 UC</div>
+                <button class="buy-btn" onclick="processPurchase(60, 'داسيا اليقطين')">امتلاك الآن</button>
             </div>
-        `;
-        container.innerHTML += cardHtml;
-    });
+        </div>
 
-    function buyItem(price, itemName) {
-        if (currentBalance >= price) {
-            currentBalance -= price;
-            updateBalance();
-            showToast(`مبروك! حصلت على ${itemName}`);
-        } else {
-            alert("رصيد UC غير كافٍ! اشحن لفتح البكج.");
+        <div class="card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6-m6R-m_O3eNAnZ9H5i8R-A1D8f9j6U6o-A&s" alt="UAZ">
+            <div class="card-content">
+                <div class="card-title">جيب - غضب الصحراء</div>
+                <div class="price-tag">120 UC</div>
+                <button class="buy-btn" onclick="processPurchase(120, 'جيب غضب الصحراء')">امتلاك الآن</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyT4T2p-HhP9O3Rk9z0Q5e9k_oW2F9z9-O7Q&s" alt="Lamborghini">
+            <div class="card-content">
+                <div class="card-title">لامبورجيني - افينتادور</div>
+                <div class="price-tag">500 UC</div>
+                <button class="buy-btn" onclick="processPurchase(500, 'لامبورجيني')">امتلاك الآن</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="msg" class="notification"></div>
+
+    <script>
+        // نظام الرصيد الذكي
+        let balance = 1000;
+
+        function processPurchase(price, name) {
+            const msgDiv = document.getElementById('msg');
+            
+            if (balance >= price) {
+                balance -= price;
+                document.getElementById('balance').innerText = balance;
+                
+                showNotification(`✅ نجحت العملية! تم إضافة ${name} إلى حسابك.`, "#2ecc71");
+            } else {
+                showNotification(`❌ رصيد UC غير كافٍ! تحتاج إلى ${price - balance} إضافية.`, "#e74c3c");
+            }
         }
-    }
 
-    function updateBalance() {
-        document.getElementById('balance').innerText = currentBalance;
-        localStorage.setItem('uc_balance', currentBalance); // حفظ الرصيد
-    }
-
-    function showToast(msg) {
-        const toast = document.getElementById('toast');
-        toast.innerText = msg;
-        toast.style.display = 'block';
-        setTimeout(() => { toast.style.display = 'none'; }, 3000);
-    }
-</script>
-
+        function showNotification(text, color) {
+            const msgDiv = document.getElementById('msg');
+            msgDiv.innerText = text;
+            msgDiv.style.display = "block";
+            msgDiv.style.backgroundColor = color;
+            
+            setTimeout(() => {
+                msgDiv.style.display = "none";
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
