@@ -3,196 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر سيارات PUBG Mobile</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>PUBG Mobile - متجر المركبات الملكي</title>
     <style>
         :root {
-            --primary: #ffb100;
-            --accent: #ff4d4d;
-            --bg-dark: #0f1218;
-            --card-bg: rgba(255, 255, 255, 0.05);
+            --primary: #f59e0b;
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
         }
 
         body {
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-dark);
-            background-image: radial-gradient(circle at top, #1e2530 0%, #0f1218 100%);
-            color: white;
+            color: var(--text-main);
             margin: 0;
-            padding-bottom: 50px;
-        }
-
-        .navbar {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px 5%;
+            padding: 0;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            border-bottom: 2px solid var(--primary);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            backdrop-filter: blur(10px);
         }
 
-        .logo { font-size: 24px; font-weight: 900; color: var(--primary); text-transform: uppercase; }
+        /* الهيدر الاحترافي */
+        header {
+            width: 100%;
+            background: linear-gradient(180deg, rgba(245, 158, 11, 0.2) 0%, rgba(15, 23, 42, 0) 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
 
-        .wallet-container {
-            background: linear-gradient(45deg, #2ecc71, #27ae60);
-            padding: 8px 20px;
+        h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+
+        .balance-card {
+            background: var(--card-bg);
+            padding: 15px 40px;
             border-radius: 50px;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+            border: 2px solid var(--primary);
+            margin-top: 20px;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: inline-block;
         }
 
-        .hero { padding: 40px 20px; text-align: center; }
-        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; color: #fff; }
+        #balance { color: var(--primary); font-weight: bold; }
 
-        .shop-container {
+        /* شبكة المنتجات */
+        .shop-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
-            padding: 20px 5%;
+            width: 90%;
             max-width: 1200px;
-            margin: 0 auto;
+            padding: 40px 0;
         }
 
-        .card {
+        .item-card {
             background: var(--card-bg);
             border-radius: 20px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+            border: 1px solid #334155;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
         }
 
-        .card:hover {
-            transform: translateY(-10px);
+        .item-card:hover {
+            transform: scale(1.05);
             border-color: var(--primary);
-            box-shadow: 0 10px 30px rgba(255, 177, 0, 0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
         }
 
-        .card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .card-content { padding: 20px; }
-        .card-title { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
-        
-        .price-tag {
+        .item-image {
+            height: 200px;
+            background: #000;
             display: flex;
             align-items: center;
-            gap: 5px;
+            justify-content: center;
+            font-size: 5rem;
+            background-image: linear-gradient(45deg, #1e293b, #0f172a);
+        }
+
+        .item-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .item-name { font-size: 1.3rem; margin: 10px 0; }
+
+        .price-box {
+            background: rgba(245, 158, 11, 0.1);
             color: var(--primary);
-            font-size: 18px;
+            padding: 5px 15px;
+            border-radius: 8px;
             font-weight: bold;
             margin-bottom: 20px;
+            display: inline-block;
         }
 
         .buy-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
             background: var(--primary);
             color: #000;
-            border: none;
-            padding: 12px;
-            width: 100%;
-            border-radius: 12px;
-            font-weight: 900;
+            font-weight: bold;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: 0.3s;
         }
 
-        .buy-btn:hover { background: #fff; transform: scale(1.02); }
-        .buy-btn:active { transform: scale(0.98); }
+        .buy-btn:hover { background: #fbbf24; }
+        .buy-btn:active { transform: scale(0.95); }
 
-        /* تأثيرات الإشعارات */
-        .notification {
+        /* تنبيهات مخصصة */
+        .toast {
             position: fixed;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
+            right: 20px;
+            background: #10b981;
+            color: white;
             padding: 15px 30px;
             border-radius: 10px;
             display: none;
-            z-index: 2000;
-            font-weight: bold;
+            animation: slideIn 0.5s ease;
         }
+
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
     </style>
 </head>
 <body>
 
-    <nav class="navbar">
-        <div class="logo">PUBG CARS STORE</div>
-        <div class="wallet-container">
-            💰 الرصيد: <span id="balance">1000</span> UC
+    <header>
+        <h1>PUBG MOBILE LUXURY 🏎️</h1>
+        <div class="balance-card">
+            رصيدك الحالي: <span id="balance">1000</span> <small>UC</small>
         </div>
-    </nav>
+    </header>
 
-    <div class="hero">
-        <h1>كراج السيارات النادرة</h1>
-        <p>اختر سيارتك المفضلة وانطلق في ساحة المعركة</p>
-    </div>
-
-    <div class="shop-container">
-        <div class="card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0N9r5vHbe9xXWpZ98Y6YtWnU-5uK39x2_OQ&s" alt="Dacia">
-            <div class="card-content">
-                <div class="card-title">داسيا - اليقطين المسحور</div>
-                <div class="price-tag">60 UC</div>
-                <button class="buy-btn" onclick="processPurchase(60, 'داسيا اليقطين')">امتلاك الآن</button>
-            </div>
+    <div class="shop-grid" id="shop">
         </div>
 
-        <div class="card">
-            <img src="https://saudiauto.com.sa/wp-content/webp-express/webp-images/uploads/2023/09/WhatsApp-Image-2023-09-17-at-4.59.48-PM-1-750x375.jpeg.webp>
-            <div class="card-content">
-                <div class="card-title">جيب - غضب الصحراء</div>
-                <div class="price-tag">120 UC</div>
-                <button class="buy-btn" onclick="processPurchase(120, 'جيب غضب الصحراء')">امتلاك الآن</button>
-            </div>
-        </div>
-
-        <div class="card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyT4T2p-HhP9O3Rk9z0Q5e9k_oW2F9z9-O7Q&s" alt="Lamborghini">
-            <div class="card-content">
-                <div class="card-title">لامبورجيني - افينتادور</div>
-                <div class="price-tag">500 UC</div>
-                <button class="buy-btn" onclick="processPurchase(500, 'لامبورجيني')">امتلاك الآن</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="msg" class="notification"></div>
+    <div id="toast" class="toast">تمت عملية الشراء بنجاح! ✅</div>
 
     <script>
-        // نظام الرصيد الذكي
-        let balance = 1000;
+        // بيانات السيارات
+        const cars = [
+            { id: 1, name: "تسلا رودستر - الإصدار الذهبي", price: 50, icon: "⚡" },
+            { id: 2, name: "لامبورغيني أفينتادور", price: 150, icon: "🏎️" },
+            { id: 3, name: "داسيا - تنين النار", price: 80, icon: "🔥" },
+            { id: 4, name: "مكلارين P1", price: 200, icon: "🏁" },
+            { id: 5, name: "يو أي زد - الوحش", price: 60, icon: "🚜" },
+            { id: 6, name: "دراجة الشبح", price: 30, icon: "🏍️" }
+        ];
 
-        function processPurchase(price, name) {
-            const msgDiv = document.getElementById('msg');
-            
-            if (balance >= price) {
-                balance -= price;
-                document.getElementById('balance').innerText = balance;
-                
-                showNotification(`✅ نجحت العملية! تم إضافة ${name} إلى حسابك.`, "#2ecc71");
+        // جلب الرصيد من ذاكرة المتصفح أو وضعه 1000 كافتراضي
+        let currentBalance = localStorage.getItem('pubg_balance') ? 
+                             parseInt(localStorage.getItem('pubg_balance')) : 1000;
+
+        const balanceEl = document.getElementById('balance');
+        const shopEl = document.getElementById('shop');
+
+        function updateUI() {
+            balanceEl.innerText = currentBalance;
+            localStorage.setItem('pubg_balance', currentBalance);
+        }
+
+        function showToast(msg, color = "#10b981") {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.backgroundColor = color;
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+        }
+
+        function buy(price, name) {
+            if (currentBalance >= price) {
+                currentBalance -= price;
+                updateUI();
+                showToast(`تم شراء ${name} بنجاح!`);
             } else {
-                showNotification(`❌ رصيد UC غير كافٍ! تحتاج إلى ${price - balance} إضافية.`, "#e74c3c");
+                showToast("عذراً، رصيدك غير كافٍ ❌", "#ef4444");
             }
         }
 
-        function showNotification(text, color) {
-            const msgDiv = document.getElementById('msg');
-            msgDiv.innerText = text;
-            msgDiv.style.display = "block";
-            msgDiv.style.backgroundColor = color;
-            
-            setTimeout(() => {
-                msgDiv.style.display = "none";
-            }, 3000);
-        }
+        // بناء المتجر تلقائياً
+        cars.forEach(car => {
+            shopEl.innerHTML += `
+                <div class="item-card">
+                    <div class="item-image">${car.icon}</div>
+                    <div class="item-info">
+                        <div class="item-name">${car.name}</div>
+                        <div class="price-box">${car.price} UC</div>
+                        <button class="buy-btn" onclick="buy(${car.price}, '${car.name}')">امتلاك الآن</button>
+                    </div>
+                </div>
+            `;
+        });
+
+        updateUI();
     </script>
 </body>
 </html>
