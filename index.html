@@ -2,193 +2,49 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>معرض سيارات PUBG الاحترافي</title>
+    <title>متجر سيارات ببجي</title>
     <style>
-        :root {
-            --primary-gold: #f39c12;
-            --bg-dark: #0a0a0a;
-            --card-bg: #1a1a1a;
-            --success-green: #2ecc71;
-        }
-
-        body { 
-            font-family: 'Cairo', sans-serif; 
-            background-color: var(--bg-dark); 
-            color: white; 
-            margin: 0;
-            padding-bottom: 50px;
-        }
-
-        .header { 
-            background: #111; 
-            padding: 30px; 
-            border-bottom: 4px solid var(--primary-gold); 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-
-        .balance-container {
-            background: rgba(243, 156, 18, 0.1);
-            display: inline-block;
-            padding: 10px 25px;
-            border-radius: 50px;
-            border: 1px solid var(--primary-gold);
-            margin-top: 10px;
-        }
-
-        .balance-box { font-size: 28px; color: var(--primary-gold); font-weight: bold; }
-
-        .container { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 25px; 
-            padding: 40px;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .card { 
-            background: var(--card-bg); 
-            border-radius: 20px; 
-            padding: 20px; 
-            text-align: center;
-            border: 1px solid #333; 
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card:hover { 
-            transform: translateY(-15px); 
-            border-color: var(--primary-gold);
-            box-shadow: 0 10px 30px rgba(243, 156, 18, 0.2);
-        }
-
-        .card img { 
-            width: 100%; 
-            height: 160px;
-            object-fit: contain;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5));
-            margin-bottom: 15px;
-        }
-
-        .card h3 { margin: 10px 0; font-size: 22px; color: #fff; }
-
-        .price-tag { 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-            color: var(--success-green); 
-            font-size: 22px; 
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        button { 
-            background: linear-gradient(45deg, #f39c12, #e67e22);
-            border: none; 
-            padding: 12px; 
-            border-radius: 12px; 
-            color: white; 
-            cursor: pointer; 
-            font-weight: bold; 
-            width: 100%; 
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
-        button:hover { opacity: 0.9; transform: scale(1.02); }
-        button:active { transform: scale(0.98); }
-
-        /* تنبيهات مخصصة */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--success-green);
-            padding: 15px 30px;
-            border-radius: 10px;
-            display: none;
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn { from {right: -100px; opacity: 0;} to {right: 20px; opacity: 1;} }
+        body { font-family: sans-serif; background: #1a1a1a; color: white; text-align: center; }
+        .balance-box { background: #333; padding: 20px; font-size: 24px; position: sticky; top: 0; }
+        .car-card { border: 1px solid #444; margin: 20px; padding: 15px; display: inline-block; width: 250px; border-radius: 10px; }
+        .car-card img { width: 100%; border-radius: 5px; }
+        button { background: #f39c12; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; border-radius: 5px; }
+        button:disabled { background: #555; }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>مـعرض سـيارات PUBG Mobile</h1>
-    <div class="balance-container">
-        <div class="balance-box">رصيدك: <span id="balance">5000</span> <small>UC</small></div>
+<div class="balance-box">
+    رصيدك: <span id="balance">1000</span> عملة UC
+</div>
+
+<div class="shop">
+    <!-- سيارة 1 -->
+    <div class="car-card">
+        <h3>لامبورجيني</h3>
+        <p>السعر: 50 UC</p>
+        <button onclick="buyCar(50)">شراء الآن</button>
+    </div>
+
+    <!-- سيارة 2 -->
+    <div class="car-card">
+        <h3>تيسلا</h3>
+        <p>السعر: 150 UC</p>
+        <button onclick="buyCar(150)">شراء الآن</button>
     </div>
 </div>
 
-<div class="container" id="cars-container">
-    </div>
-
-<div id="toast" class="toast">تمت عملية الشراء بنجاح!</div>
-
 <script>
-    // قائمة السيارات الحقيقية من البكجات
-    const cars = [
-        { name: "Dacia - اليقطين", img: "https://www.pubgmobile.com/images/event/car_skin/car1.png" },
-        { name: "UAZ - Godzilla", img: "https://www.pubgmobile.com/images/event/car_skin/car2.png" },
-        { name: "Koenigsegg Jesko", img: "https://www.pubgmobile.com/images/event/car_skin/car3.png" },
-        { name: "McLaren 570S", img: "https://www.pubgmobile.com/images/event/car_skin/car4.png" },
-        { name: "Lamborghini Aventador", img: "https://www.pubgmobile.com/images/event/car_skin/car5.png" },
-        { name: "Aston Martin DBS", img: "https://www.pubgmobile.com/images/event/car_skin/car6.png" },
-        { name: "Dodge Challenger", img: "https://www.pubgmobile.com/images/event/car_skin/car7.png" },
-        { name: "Pagani Imola", img: "https://www.pubgmobile.com/images/event/car_skin/car8.png" },
-        { name: "Bugatti La Voiture Noire", img: "https://www.pubgmobile.com/images/event/car_skin/car9.png" },
-        { name: "Bentley Mulliner", img: "https://www.pubgmobile.com/images/event/car_skin/car10.png" }
-    ];
+    let currentBalance = 1000;
 
-    // استرجاع الرصيد من ذاكرة المتصفح أو البدء بـ 5000
-    let currentBalance = localStorage.getItem('uc_balance') ? parseInt(localStorage.getItem('uc_balance')) : 5000;
-    document.getElementById('balance').innerText = currentBalance;
-
-    const container = document.getElementById('cars-container');
-
-    // توليد البطاقات تلقائياً مع زيادة السعر 60 لكل سيارة
-    cars.forEach((car, index) => {
-        const price = 60 + (index * 60); // أول سيارة 60، الثانية 120، الثالثة 180...
-        
-        const cardHtml = `
-            <div class="card">
-                <img src="https://img.icons8.com/color/160/sports-car.png" alt="car"> 
-                <h3>${car.name}</h3>
-                <div class="price-tag">${price} UC</div>
-                <button onclick="buyItem(${price}, '${car.name}')">شراء من البكج</button>
-            </div>
-        `;
-        container.innerHTML += cardHtml;
-    });
-
-    function buyItem(price, itemName) {
+    function buyCar(price) {
         if (currentBalance >= price) {
-            currentBalance -= price;
-            updateBalance();
-            showToast(`مبروك! حصلت على ${itemName}`);
+            currentBalance -= price; // عملية الطرح
+            document.getElementById('balance').innerText = currentBalance;
+            alert("تم الشراء بنجاح!");
         } else {
-            alert("رصيد UC غير كافٍ! اشحن لفتح البكج.");
+            alert("رصيدك غير كافٍ!");
         }
-    }
-
-    function updateBalance() {
-        document.getElementById('balance').innerText = currentBalance;
-        localStorage.setItem('uc_balance', currentBalance); // حفظ الرصيد
-    }
-
-    function showToast(msg) {
-        const toast = document.getElementById('toast');
-        toast.innerText = msg;
-        toast.style.display = 'block';
-        setTimeout(() => { toast.style.display = 'none'; }, 3000);
     }
 </script>
 
