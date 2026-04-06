@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PUBG Mobile | Tactical Garage</title>
+    <title>PUBG Mobile | Tactical Garage (FIXED)</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -30,6 +30,9 @@
             align-items: center;
             border-bottom: 2px solid var(--neon-green);
             box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .system-status { font-family: 'Orbitron', sans-serif; font-size: 14px; color: var(--neon-green); }
@@ -42,6 +45,9 @@
             color: var(--cyber-yellow);
             font-weight: 900;
             font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         /* حاوية المتجر */
@@ -59,35 +65,52 @@
             position: relative;
             transition: 0.3s;
             clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .tactical-card:hover { background: #25282c; transform: scale(1.02); }
 
-        .tactical-card img {
+        .image-wrapper {
             width: 100%;
-            height: 150px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-bottom: 15px;
         }
 
-        .car-info { border-top: 1px solid #333; margin-top: 15px; padding-top: 10px; }
-        .car-name { font-family: 'Orbitron', sans-serif; font-size: 18px; color: #fff; }
-        .price { color: var(--neon-green); font-size: 22px; font-weight: bold; margin: 10px 0; }
+        .tactical-card img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(0, 255, 204, 0.3));
+        }
+
+        .car-info { border-top: 1px solid #333; padding-top: 10px; }
+        .car-name { font-family: 'Orbitron', sans-serif; font-size: 18px; color: #fff; margin-bottom: 5px; }
+        .car-class { font-size: 12px; color: #888; text-transform: uppercase; margin-bottom: 10px; display: block;}
+        .price { color: var(--neon-green); font-size: 24px; font-weight: bold; margin: 10px 0; font-family: 'Orbitron'; }
 
         .buy-action {
             background: var(--neon-green);
             color: #000;
             border: none;
-            padding: 10px;
+            padding: 12px;
             width: 100%;
             font-weight: 900;
             cursor: pointer;
             clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+            transition: 0.3s;
         }
+
+        .buy-action:hover { background: #fff; box-shadow: 0 0 15px #fff; }
 
         /* المرآب الشخصي */
         .garage-section {
-            background: #111;
+            background: #0a0a0a;
             padding: 50px 5%;
             margin-top: 50px;
             border-top: 1px dashed var(--neon-green);
@@ -101,46 +124,55 @@
         }
 
         .owned-car {
-            width: 100px;
-            height: 100px;
-            background: #222;
-            border: 1px solid #444;
+            width: 120px;
+            height: 120px;
+            background: #1a1c1e;
+            border: 1px solid #333;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 8px;
+            padding: 10px;
+            transition: 0.3s;
         }
+        
+        .owned-car:hover { border-color: var(--neon-green); transform: translateY(-5px); }
 
-        .owned-car img { width: 80%; }
+        .owned-car img { max-width: 100%; max-height: 100%; object-fit: contain; }
     </style>
 </head>
 <body>
 
 <div class="top-bar">
-    <div class="system-status">SYS_STATUS: ACTIVE // GARAGE_v4.0</div>
-    <div class="uc-display"><span id="uc-val">5000</span> UC</div>
+    <div class="system-status">SYS_STATUS: ACTIVE // GARAGE_v4.1</div>
+    <div class="uc-display">
+        <img src="https://img.icons8.com/fluency/30/coins.png" alt="UC"/>
+        <span id="uc-val">5000</span> UC
+    </div>
 </div>
 
-<h2 style="text-align: center; margin-top: 40px; font-family: 'Orbitron';">CENTRAL MARKETPLACE</h2>
+<h1 style="text-align: center; margin-top: 50px; font-family: 'Orbitron'; font-weight: 900; letter-spacing: 3px; color: #fff;">CENTRAL MARKETPLACE</h1>
 <div class="grid-container" id="shop"></div>
 
 <div class="garage-section">
-    <h2 style="font-family: 'Orbitron'; color: var(--neon-green);">MY PRIVATE GARAGE</h2>
+    <h2 style="font-family: 'Orbitron'; color: var(--neon-green); letter-spacing: 2px;">MY PRIVATE GARAGE</h2>
     <div class="garage-grid" id="myGarage">
         </div>
 </div>
 
 <script>
+    // بيانات السيارات مع روابط صور جديدة وشغالة ومستضافة على GitHub
     const carData = [
-        { id: 1, name: "Lamborghini", img: "https://www.pubgmobile.com/images/event/car_skin/car5.png" },
-        { id: 2, name: "McLaren", img: "https://www.pubgmobile.com/images/event/car_skin/car4.png" },
-        { id: 3, name: "Koenigsegg", img: "https://www.pubgmobile.com/images/event/car_skin/car3.png" },
-        { id: 4, name: "Aston Martin", img: "https://www.pubgmobile.com/images/event/car_skin/car6.png" },
-        { id: 5, name: "Dodge", img: "https://www.pubgmobile.com/images/event/car_skin/car7.png" }
+        { id: 1, name: "McLaren 570S", class: "Supercar", img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/mclaren.png" },
+        { id: 2, name: "Lamborghini SVJ", class: "Supercar", img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/lambo.png" },
+        { id: 3, name: "Koenigsegg Jesko", class: "Hypercar", img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/koenigsegg.png" },
+        { id: 4, name: "Dodge Challenger", class: "Muscle", img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/dodge.png" },
+        { id: 5, name: "Aston Martin Valkyrie", class: "Hypercar", img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/aston.png" },
+        { id: 6, name: "Bugatti La Voiture Noire", class: "Hypercar", img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/bugatti.png" }
     ];
 
-    let wallet = localStorage.getItem('wallet_uc') ? parseInt(localStorage.getItem('wallet_uc')) : 5000;
-    let myCars = JSON.parse(localStorage.getItem('owned_cars')) || [];
+    let wallet = localStorage.getItem('wallet_uc_v4') ? parseInt(localStorage.getItem('wallet_uc_v4')) : 5000;
+    let myCars = JSON.parse(localStorage.getItem('owned_cars_v4')) || [];
 
     function init() {
         document.getElementById('uc-val').innerText = wallet;
@@ -155,8 +187,11 @@
             const price = 60 + (index * 60);
             shop.innerHTML += `
                 <div class="tactical-card">
-                    <img src="${car.img}">
+                    <div class="image-wrapper">
+                        <img src="${car.img}" onerror="this.src='https://img.icons8.com/fluency/180/car--v1.png'; this.style.opacity=0.3;">
+                    </div>
                     <div class="car-info">
+                        <span class="car-class">${car.class}</span>
                         <div class="car-name">${car.name}</div>
                         <div class="price">${price} UC</div>
                         <button class="buy-action" onclick="buy(${index}, ${price})">ACQUIRE UNIT</button>
@@ -180,15 +215,15 @@
 
     function renderGarage() {
         const garage = document.getElementById('myGarage');
-        garage.innerHTML = myCars.length === 0 ? '<p style="color:#666">No units acquired yet...</p>' : '';
+        garage.innerHTML = myCars.length === 0 ? '<p style="color:#555; font-family: Cairo;">لم تقم بالاستحواذ على أي وحدات بعد...</p>' : '';
         myCars.forEach(car => {
-            garage.innerHTML += `<div class="owned-car"><img src="${car.img}"></div>`;
+            garage.innerHTML += `<div class="owned-car"><img src="${car.img}" onerror="this.src='https://img.icons8.com/fluency/180/car--v1.png'; this.style.opacity=0.3;"></div>`;
         });
     }
 
     function save() {
-        localStorage.setItem('wallet_uc', wallet);
-        localStorage.setItem('owned_cars', JSON.stringify(myCars));
+        localStorage.setItem('wallet_uc_v4', wallet);
+        localStorage.setItem('owned_cars_v4', JSON.stringify(myCars));
     }
 
     init();
