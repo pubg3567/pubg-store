@@ -2,7 +2,8 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>متجر ببجي</title>
+<title>متجر سيارات ببجي</title>
+
 <style>
 body {
   font-family: Arial;
@@ -15,57 +16,58 @@ h1 {
   color: gold;
 }
 
+.balance {
+  margin:20px;
+  font-size:20px;
+}
+
+.shop {
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:20px;
+}
+
 .card {
   background:#1f2937;
-  padding:20px;
-  border-radius:20px;
-  width:250px;
-  margin:auto;
-  box-shadow:0 0 15px black;
+  padding:15px;
+  border-radius:15px;
+  width:200px;
   transition:0.3s;
+  box-shadow:0 0 10px black;
 }
 
 .card:hover {
   transform: scale(1.05);
-  box-shadow:0 0 25px gold;
+  box-shadow:0 0 20px gold;
 }
 
-img {
+.card img {
   width:100%;
-  border-radius:15px;
+  border-radius:10px;
 }
 
 button {
   background:green;
   color:white;
   border:none;
-  padding:12px;
+  padding:10px;
   border-radius:10px;
   cursor:pointer;
-  font-size:18px;
-}
-
-.balance {
-  margin:20px;
-  font-size:20px;
 }
 </style>
+
 </head>
 
 <body>
 
-<h1>🚗 متجر ببجي</h1>
+<h1>🚗 متجر سيارات ببجي</h1>
 
 <div class="balance">
 💰 رصيدك: <span id="coins">1000</span>
 </div>
 
-<div class="card">
-<img src="https://i.imgur.com/8Km9tLL.png">
-<h2>Buggy</h2>
-<p>السعر: 50 عملة</p>
-<button onclick="buy()">شراء</button>
-</div>
+<div class="shop" id="shop"></div>
 
 <audio id="sound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3"></audio>
 
@@ -73,8 +75,33 @@ button {
 let coins = localStorage.getItem("coins") || 1000;
 document.getElementById("coins").innerText = coins;
 
-function buy(){
-  let price = 50;
+// السيارات
+let cars = [
+  {name:"Buggy", img:"https://i.imgur.com/8Km9tLL.png"},
+  {name:"Dacia", img:"https://i.imgur.com/Vz81P9K.png"},
+  {name:"UAZ", img:"https://i.imgur.com/9Q9Z1Zm.png"},
+  {name:"Mirado", img:"https://i.imgur.com/tK6sF9F.png"},
+  {name:"Pickup", img:"https://i.imgur.com/2DhmtJ4.png"},
+  {name:"Motorbike", img:"https://i.imgur.com/YpFhG0R.png"}
+];
+
+// إنشاء السيارات
+let shop = document.getElementById("shop");
+
+cars.forEach((car, index) => {
+  let price = (index + 1) * 60;
+
+  shop.innerHTML += `
+    <div class="card">
+      <img src="${car.img}">
+      <h3>${car.name}</h3>
+      <p>${price} عملة</p>
+      <button onclick="buy(${price})">شراء</button>
+    </div>
+  `;
+});
+
+function buy(price){
   coins = parseInt(coins);
 
   if(coins >= price){
@@ -82,7 +109,7 @@ function buy(){
     localStorage.setItem("coins", coins);
     document.getElementById("coins").innerText = coins;
     document.getElementById("sound").play();
-    alert("✅ تم الشراء");
+    alert("✅ تم شراء السيارة!");
   } else {
     alert("❌ رصيدك ما يكفي");
   }
