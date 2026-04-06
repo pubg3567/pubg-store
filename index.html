@@ -3,185 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PUBG Mobile Car Store</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>متجر سيارات ببجي الاحترافي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --gold: #ffcc00;
-            --dark-bg: #0b0b0b;
-            --card-bg: #161616;
-            --text-gray: #b3b3b3;
+            --gold: #fbc02d;
+            --dark-bg: #0f0f0f;
+            --card-bg: #1e1e1e;
         }
 
         body { 
             font-family: 'Cairo', sans-serif; 
             background-color: var(--dark-bg); 
             color: white; 
-            margin: 0;
-            overflow-x: hidden;
-        }
-
-        /* رأس الصفحة */
-        .header { 
-            background: linear-gradient(180deg, #1a1a1a 0%, #0b0b0b 100%);
-            padding: 40px 20px; 
-            border-bottom: 2px solid var(--gold); 
+            margin: 0; 
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
-        h1 { font-weight: 900; letter-spacing: 2px; margin: 0; color: #fff; text-shadow: 2px 2px 10px rgba(255,204,0,0.3); }
+        .header { 
+            background: #1a1a1a; 
+            padding: 20px; 
+            border-bottom: 3px solid var(--gold); 
+            sticky: top;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
 
-        /* صندوق الرصيد */
-        .balance-card {
-            display: inline-flex;
-            align-items: center;
-            background: rgba(255, 204, 0, 0.1);
-            padding: 10px 25px;
-            border-radius: 12px;
+        .balance-display {
+            font-size: 26px;
+            color: var(--gold);
+            background: rgba(251, 192, 45, 0.1);
+            padding: 10px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 15px;
             border: 1px solid var(--gold);
-            margin-top: 20px;
         }
 
-        .balance-card span { font-size: 24px; color: var(--gold); font-weight: bold; margin: 0 10px; }
-
-        /* شبكة المنتجات */
         .container { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 30px; 
-            padding: 50px 20px; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; 
+            padding: 40px; 
             max-width: 1200px; 
             margin: auto;
         }
 
         .card { 
             background: var(--card-bg); 
-            border-radius: 20px; 
-            padding: 25px; 
-            border: 1px solid #222; 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-align: center;
+            border-radius: 15px; 
+            padding: 20px; 
+            border: 1px solid #333; 
+            transition: 0.3s ease;
         }
 
         .card:hover { 
-            transform: scale(1.05);
+            transform: translateY(-10px); 
             border-color: var(--gold);
-            box-shadow: 0 15px 40px rgba(255, 204, 0, 0.15);
+            box-shadow: 0 10px 20px rgba(251, 192, 45, 0.2);
         }
 
-        /* تعديل الصور لتعمل مع ملفات GitHub */
-        .card img { 
-            width: 100%; 
-            height: 180px; 
-            object-fit: contain; 
-            margin-bottom: 20px;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+        /* استخدام أيقونات SVG لضمان ظهورها دائماً */
+        .car-icon {
+            width: 100px;
+            height: auto;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px var(--gold));
         }
 
-        .car-title { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+        .car-name { font-size: 20px; margin-bottom: 10px; color: #fff; }
 
-        .price-box { font-size: 20px; color: #44ff44; margin-bottom: 25px; font-weight: bold; }
+        .price { 
+            font-size: 22px; 
+            color: #4caf50; 
+            font-weight: bold; 
+            margin-bottom: 20px; 
+        }
 
         button { 
-            background: var(--gold);
-            color: #000;
+            background: linear-gradient(to right, #fbc02d, #f9a825);
             border: none; 
-            padding: 15px; 
-            border-radius: 10px; 
-            font-weight: 900; 
+            padding: 12px; 
+            border-radius: 8px; 
+            color: #000; 
+            font-weight: bold; 
             width: 100%; 
             cursor: pointer;
-            text-transform: uppercase;
-            transition: 0.3s;
+            transition: 0.2s;
         }
 
-        button:hover { background: #e6b800; transform: translateY(-2px); }
+        button:hover { opacity: 0.9; transform: scale(1.02); }
+        button:active { transform: scale(0.95); }
 
-        /* تنبيه النجاح */
-        #notification {
+        .toast {
             position: fixed;
-            top: 20px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: #2ecc71;
-            color: white;
+            background: #4caf50;
             padding: 15px 40px;
-            border-radius: 50px;
-            font-weight: bold;
+            border-radius: 10px;
             display: none;
-            z-index: 9999;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            z-index: 10000;
         }
     </style>
 </head>
 <body>
 
-<div id="notification">تم شراء السيارة وإضافتها للمرآب! ✅</div>
-
 <div class="header">
-    <h1>PUBG CARS PREMIUM SHOP</h1>
-    <div class="balance-card">
-        <img src="https://img.icons8.com/color/30/coins.png" alt="coin">
-        <span id="uc-amount">1000</span> UC
+    <h1>سوق سيارات PUBG MOBILE</h1>
+    <div class="balance-display">
+        رصيدك: <span id="balance-val">5000</span> UC
     </div>
 </div>
 
-<div class="container" id="main-shop">
+<div class="container" id="shop-grid">
     </div>
 
+<div id="toast" class="toast">تمت الإضافة للمرآب بنجاح! ✅</div>
+
 <script>
-    // قائمة السيارات مع زيادة السعر 60 لكل وحدة
-    // ملاحظة: استبدل "car1.png" بأسماء الصور التي ترفعها على GitHub
-    const carsData = [
-        { name: "Dacia اليقطين", img: "car1.png" },
-        { name: "UAZ الوحش Godzilla", img: "car2.png" },
-        { name: "McLaren 570S", img: "car3.png" },
-        { name: "Lamborghini SVJ", img: "car4.png" },
-        { name: "Koenigsegg Jesko", img: "car5.png" },
-        { name: "Aston Martin Valkyrie", img: "car6.png" },
-        { name: "Bugatti Chiron", img: "car7.png" },
-        { name: "Pagani Imola", img: "car8.png" }
+    // بيانات السيارات الحقيقية في اللعبة
+    const carList = [
+        "داسيا اليقطين", "جيب Godzilla", "كونيجسيج Jesko", 
+        "ماكلارين 570S", "لامبورجيني Aventador", "أستون مارتن DBS", 
+        "دوج تشالنجر", "باغاني ايمولا", "بوغاتي السوداء", 
+        "بنتلي مولينير", "تيسلا موديل Y", "فيراري 296 GTB"
     ];
 
-    let currentUC = localStorage.getItem('userUC') ? parseInt(localStorage.getItem('userUC')) : 1000;
-    document.getElementById('uc-amount').innerText = currentUC;
+    let balance = localStorage.getItem('myUC') ? parseInt(localStorage.getItem('myUC')) : 5000;
+    document.getElementById('balance-val').innerText = balance;
 
-    const shop = document.getElementById('main-shop');
+    const grid = document.getElementById('shop-grid');
 
-    carsData.forEach((car, index) => {
-        const price = 60 + (index * 60);
+    // صورة سيارة SVG ثابتة لا تختفي أبداً
+    const carIconSvg = `
+        <svg class="car-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 17H5V16C5 14.3431 6.34315 13 8 13H16C17.6569 13 19 14.3431 19 16V17Z" fill="#fbc02d"/>
+            <path d="M3 11L5.5 5H18.5L21 11H3Z" fill="#fbc02d"/>
+            <circle cx="7" cy="18" r="2" fill="#fff"/>
+            <circle cx="17" cy="18" r="2" fill="#fff"/>
+        </svg>
+    `;
+
+    carList.forEach((name, i) => {
+        const carPrice = 60 + (i * 60); // زيادة 60 لكل سيارة
         
-        const cardDiv = document.createElement('div');
-        cardDiv.className = 'card';
-        cardDiv.innerHTML = `
-            <img src="${car.img}" onerror="this.src='https://img.icons8.com/fluency/180/car--v1.png'" alt="${car.name}">
-            <div class="car-title">${car.name}</div>
-            <div class="price-box">${price} UC</div>
-            <button onclick="buyCar(${price})">شراء الآن</button>
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            ${carIconSvg}
+            <div class="car-name">${name}</div>
+            <div class="price">${carPrice} UC</div>
+            <button onclick="purchase(${carPrice}, '${name}')">فتح الصندوق</button>
         `;
-        shop.appendChild(cardDiv);
+        grid.appendChild(card);
     });
 
-    function buyCar(cost) {
-        if (currentUC >= cost) {
-            currentUC -= cost;
-            updateBalance();
+    function purchase(cost, name) {
+        if (balance >= cost) {
+            balance -= cost;
+            updateUI();
             showNotice();
         } else {
-            alert("رصيد UC غير كافٍ! يرجى شحن حسابك.");
+            alert("عذراً! رصيدك لا يكفي لشراء " + name);
         }
     }
 
-    function updateBalance() {
-        document.getElementById('uc-amount').innerText = currentUC;
-        localStorage.setItem('userUC', currentUC);
+    function updateUI() {
+        document.getElementById('balance-val').innerText = balance;
+        localStorage.setItem('myUC', balance);
     }
 
     function showNotice() {
-        const note = document.getElementById('notification');
-        note.style.display = 'block';
-        setTimeout(() => { note.style.display = 'none'; }, 2500);
+        const t = document.getElementById('toast');
+        t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 2000);
     }
 </script>
 
