@@ -3,195 +3,212 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PUBG Mobile | Tactical Garage</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
+    <title>ببجي موبايل | معرض السيارات الملكي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-green: #00ffcc;
-            --army-gray: #1a1c1e;
-            --cyber-yellow: #ffcc00;
+            --gold: #ffcc00;
+            --bg-gradient: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0a 100%);
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
         }
 
         body { 
             font-family: 'Cairo', sans-serif; 
-            background-color: #050505;
+            background: var(--bg-gradient);
             color: white; 
             margin: 0;
-            background-image: linear-gradient(rgba(0, 255, 204, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 204, 0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
+            min-height: 100vh;
         }
 
-        /* الهيدر التكتيكي */
-        .top-bar {
-            background: var(--army-gray);
-            padding: 15px 5%;
+        /* رأس الصفحة بتصميم زجاجي */
+        .navbar {
+            backdrop-filter: blur(15px);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid var(--neon-green);
-            box-shadow: 0 0 20px rgba(0, 255, 204, 0.2);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .system-status { font-family: 'Orbitron', sans-serif; font-size: 14px; color: var(--neon-green); }
+        .logo { font-weight: 900; font-size: 24px; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
 
-        .uc-display {
-            background: #000;
-            border: 1px solid var(--cyber-yellow);
-            padding: 5px 20px;
-            border-radius: 4px;
-            color: var(--cyber-yellow);
-            font-weight: 900;
-            font-size: 20px;
-        }
-
-        /* حاوية المتجر */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 40px 5%;
-        }
-
-        .tactical-card {
-            background: rgba(26, 28, 30, 0.9);
-            border-left: 4px solid var(--neon-green);
-            padding: 20px;
-            position: relative;
-            transition: 0.3s;
-            clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
-        }
-
-        .tactical-card:hover { background: #25282c; transform: scale(1.02); }
-
-        .tactical-card img {
-            width: 100%;
-            height: 150px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
-        }
-
-        .car-info { border-top: 1px solid #333; margin-top: 15px; padding-top: 10px; }
-        .car-name { font-family: 'Orbitron', sans-serif; font-size: 18px; color: #fff; }
-        .price { color: var(--neon-green); font-size: 22px; font-weight: bold; margin: 10px 0; }
-
-        .buy-action {
-            background: var(--neon-green);
+        .uc-badge {
+            background: linear-gradient(90deg, #ffcc00, #f39c12);
             color: #000;
-            border: none;
-            padding: 10px;
-            width: 100%;
+            padding: 8px 20px;
+            border-radius: 50px;
             font-weight: 900;
-            cursor: pointer;
-            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
-        }
-
-        /* المرآب الشخصي */
-        .garage-section {
-            background: #111;
-            padding: 50px 5%;
-            margin-top: 50px;
-            border-top: 1px dashed var(--neon-green);
-        }
-
-        .garage-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .owned-car {
-            width: 100px;
-            height: 100px;
-            background: #222;
-            border: 1px solid #444;
             display: flex;
             align-items: center;
-            justify-content: center;
-            border-radius: 8px;
+            gap: 10px;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
         }
 
-        .owned-car img { width: 80%; }
+        /* شبكة السيارات */
+        .shop-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding: 40px 5%;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .car-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .car-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--gold);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        }
+
+        .car-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+            transition: 0.5s;
+        }
+
+        .car-card:hover img { transform: scale(1.1) rotate(-3deg); }
+
+        .car-name { font-size: 20px; font-weight: 700; margin-bottom: 5px; }
+        .car-rarity { font-size: 12px; color: var(--gold); text-transform: uppercase; margin-bottom: 15px; display: block; }
+
+        .price-tag {
+            font-size: 24px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .buy-btn {
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            padding: 12px;
+            border-radius: 12px;
+            width: 100%;
+            cursor: pointer;
+            font-weight: 700;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .buy-btn:hover {
+            background: var(--gold);
+            color: #000;
+            box-shadow: 0 0 15px var(--gold);
+        }
+
+        /* إشعار النجاح */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #27ae60;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 15px;
+            display: none;
+            animation: slideIn 0.4s ease;
+            z-index: 2000;
+        }
+
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
     </style>
 </head>
 <body>
 
-<div class="top-bar">
-    <div class="system-status">SYS_STATUS: ACTIVE // GARAGE_v4.0</div>
-    <div class="uc-display"><span id="uc-val">5000</span> UC</div>
-</div>
+<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-09.mp3" preload="auto"></audio>
 
-<h2 style="text-align: center; margin-top: 40px; font-family: 'Orbitron';">CENTRAL MARKETPLACE</h2>
-<div class="grid-container" id="shop"></div>
+<nav class="navbar">
+    <div class="logo">PUBG CAR CENTER</div>
+    <div class="uc-badge">
+        <span>رصيدك:</span>
+        <span id="uc-balance">5000</span>
+        <span>UC</span>
+    </div>
+</nav>
 
-<div class="garage-section">
-    <h2 style="font-family: 'Orbitron'; color: var(--neon-green);">MY PRIVATE GARAGE</h2>
-    <div class="garage-grid" id="myGarage">
-        </div>
-</div>
+<div class="shop-container" id="carsGrid"></div>
+
+<div id="toast">تم فتح الصندوق بنجاح! 📦</div>
 
 <script>
-    const carData = [
-        { id: 1, name: "Lamborghini", img: "https://4kwallpapers.com/images/walls/thumbs_3t/12915.jpg" },
-        { id: 2, name: "McLaren", img: "https://www.pubgmobile.com/images/event/car_skin/car4.png" },
-        { id: 3, name: "Koenigsegg", img: "https://www.pubgmobile.com/images/event/car_skin/car3.png" },
-        { id: 4, name: "Aston Martin", img: "https://www.pubgmobile.com/images/event/car_skin/car6.png" },
-        { id: 5, name: "Dodge", img: "https://www.pubgmobile.com/images/event/car_skin/car7.png" }
+    const cars = [
+        { name: "Lamborghini Aventador", img: "https://www.pubgmobile.com/images/event/car_skin/car5.png" },
+        { name: "McLaren 570S", img: "https://www.pubgmobile.com/images/event/car_skin/car4.png" },
+        { name: "Koenigsegg Jesko", img: "https://www.pubgmobile.com/images/event/car_skin/car3.png" },
+        { name: "Aston Martin DBS", img: "https://www.pubgmobile.com/images/event/car_skin/car6.png" },
+        { name: "Dodge Challenger", img: "https://www.pubgmobile.com/images/event/car_skin/car7.png" },
+        { name: "Bugatti La Voiture", img: "https://www.pubgmobile.com/images/event/car_skin/car9.png" },
+        { name: "Pagani Imola", img: "https://www.pubgmobile.com/images/event/car_skin/car8.png" },
+        { name: "Bentley Mulliner", img: "https://www.pubgmobile.com/images/event/car_skin/car10.png" }
     ];
 
-    let wallet = localStorage.getItem('wallet_uc') ? parseInt(localStorage.getItem('wallet_uc')) : 5000;
-    let myCars = JSON.parse(localStorage.getItem('owned_cars')) || [];
+    let uc = localStorage.getItem('pubg_uc') ? parseInt(localStorage.getItem('pubg_uc')) : 5000;
+    document.getElementById('uc-balance').innerText = uc;
 
-    function init() {
-        document.getElementById('uc-val').innerText = wallet;
-        renderShop();
-        renderGarage();
-    }
+    const grid = document.getElementById('carsGrid');
 
-    function renderShop() {
-        const shop = document.getElementById('shop');
-        shop.innerHTML = '';
-        carData.forEach((car, index) => {
-            const price = 60 + (index * 60);
-            shop.innerHTML += `
-                <div class="tactical-card">
-                    <img src="${car.img}">
-                    <div class="car-info">
-                        <div class="car-name">${car.name}</div>
-                        <div class="price">${price} UC</div>
-                        <button class="buy-action" onclick="buy(${index}, ${price})">ACQUIRE UNIT</button>
-                    </div>
-                </div>
-            `;
-        });
-    }
+    cars.forEach((car, index) => {
+        const price = 60 + (index * 60);
+        const card = document.createElement('div');
+        card.className = 'car-card';
+        card.innerHTML = `
+            <span class="car-rarity">Mythic Item</span>
+            <img src="${car.img}" alt="${car.name}">
+            <div class="car-name">${car.name}</div>
+            <div class="price-tag">${price} <small style="font-size: 12px; color: var(--gold);">UC</small></div>
+            <button class="buy-btn" onclick="processPurchase(${price})">إفتح الآن</button>
+        `;
+        grid.appendChild(card);
+    });
 
-    function buy(index, cost) {
-        if (wallet >= cost) {
-            wallet -= cost;
-            myCars.push(carData[index]);
-            save();
-            init();
-            alert("SUCCESS: UNIT TRANSFERRED TO GARAGE");
+    function processPurchase(cost) {
+        if (uc >= cost) {
+            // تشغيل الصوت
+            document.getElementById('clickSound').play();
+            
+            // خصم الرصيد
+            uc -= cost;
+            updateUI();
+            
+            // إظهار الإشعار
+            const t = document.getElementById('toast');
+            t.style.display = 'block';
+            setTimeout(() => t.style.display = 'none', 3000);
         } else {
-            alert("ERROR: INSUFFICIENT UC BALANCE");
+            alert("رصيد UC غير كافٍ!");
         }
     }
 
-    function renderGarage() {
-        const garage = document.getElementById('myGarage');
-        garage.innerHTML = myCars.length === 0 ? '<p style="color:#666">No units acquired yet...</p>' : '';
-        myCars.forEach(car => {
-            garage.innerHTML += `<div class="owned-car"><img src="${car.img}"></div>`;
-        });
+    function updateUI() {
+        document.getElementById('uc-balance').innerText = uc;
+        localStorage.setItem('pubg_uc', uc);
     }
-
-    function save() {
-        localStorage.setItem('wallet_uc', wallet);
-        localStorage.setItem('owned_cars', JSON.stringify(myCars));
-    }
-
-    init();
 </script>
 
 </body>
