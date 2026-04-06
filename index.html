@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>متجر سيارات ببجي</title>
+<style>
+body {
+    background: #0f2027;
+    color: white;
+    text-align: center;
+    font-family: Tahoma;
+}
+.shop {
+    display: flex;
+    justify-content: center;
+}
+.card {
+    background: #1c1c1c;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+}
+button {
+    background: green;
+    color: white;
+    padding: 10px;
+    border: none;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🎮 متجر سيارات ببجي</h1>
+<h2>رصيدك: <span id="coins">0</span></h2>
+
+<div class="shop">
+
+<div class="card">
+<h3>سيارة بكي</h3>
+<p>300</p>
+<button onclick="buy(300)">شراء</button>
+</div>
+
+<div class="card">
+<h3>سيارة سبورت</h3>
+<p>500</p>
+<button onclick="buy(500)">شراء</button>
+</div>
+
+</div>
+
+<script>
+let coins = localStorage.getItem("coins");
+
+if (coins === null) {
+    coins = 1000;
+    localStorage.setItem("coins", coins);
+}
+
+document.getElementById("coins").innerText = coins;
+
+function buy(price) {
+    coins = parseInt(coins);
+
+    if (coins >= price) {
+        coins -= price;
+        localStorage.setItem("coins", coins);
+        document.getElementById("coins").innerText = coins;
+        alert("تم الشراء ✅");
+    } else {
+        alert("رصيدك ما يكفي ❌");
+    }
+}
+</script>
+
+</body>
+</html>
