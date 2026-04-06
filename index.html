@@ -3,227 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PUBG Mobile | الملكي لبيع السيارات</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>متجر كروت ببجي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --neon-yellow: #ffcc00;
-            --neon-blue: #00f2fe;
-            --bg-dark: #08080a;
-            --card-bg: #111114;
-            --text-gray: #a0a0a0;
+            --main-purple: #6c40b5;
+            --dark-purple: #4a2a8a;
+            --bg-color: #f4f4f9;
         }
 
-        body { 
-            font-family: 'Cairo', sans-serif; 
-            background-color: var(--bg-dark); 
-            color: white; 
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
             margin: 0;
-            overflow-x: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #08080a 100%);
+            padding: 20px;
         }
 
-        /* رأس الصفحة */
-        .main-header { 
-            background: rgba(17, 17, 20, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 20px 5%; 
-            border-bottom: 2px solid var(--neon-yellow); 
+        .header-section {
+            text-align: right;
+            padding: 20px 5%;
+            background: white;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        h1 { color: #333; margin: 0; font-size: 24px; }
+        .breadcrumb { font-size: 13px; color: #888; margin-top: 5px; }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* تصميم الكرت (Gift Card) */
+        .card-box {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            border: 1px solid #eee;
+            position: relative;
+        }
+
+        .card-box:hover { transform: translateY(-5px); }
+
+        /* الجزء العلوي الملون (المغلف) */
+        .card-top {
+            background: var(--main-purple);
+            height: 180px;
+            position: relative;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%);
+        }
+
+        /* ثقب تعليق الكرت */
+        .card-hole {
+            width: 40px;
+            height: 12px;
+            background: var(--dark-purple);
+            border-radius: 20px;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .tag-badge {
+            position: absolute;
+            top: 15px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 5px;
+        }
+
+        .car-image {
+            width: 140px;
+            height: auto;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
+        }
+
+        .car-label {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* الجزء السفلي (السعر والزر) */
+        .card-info {
+            padding: 15px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .card-price {
+            color: var(--main-purple);
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .buy-btn {
+            background: var(--main-purple);
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+
+        .buy-btn:hover { background: var(--dark-purple); }
+
+        /* شريط الرصيد */
+        .balance-bar {
+            background: var(--main-purple);
+            color: white;
+            padding: 10px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
         }
-
-        .logo-text { font-weight: 900; font-size: 24px; color: #fff; text-transform: uppercase; letter-spacing: 2px; }
-        .logo-text span { color: var(--neon-yellow); text-shadow: 0 0 10px var(--neon-yellow); }
-
-        /* صندوق الرصيد الملكي */
-        .uc-balance-box {
-            background: rgba(255, 204, 0, 0.1);
-            border: 1px solid var(--neon-yellow);
-            padding: 10px 25px;
-            border-radius: 50px;
-            font-weight: 900;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--neon-yellow);
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.2);
-        }
-
-        .uc-balance-box span { font-size: 24px; }
-
-        /* حاوية السيارات */
-        .shop-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 30px; 
-            padding: 50px 5%; 
-            max-width: 1400px; 
-            margin: auto;
-        }
-
-        /* بطاقة السيارة الملكية */
-        .car-item { 
-            background: var(--card-bg); 
-            border-radius: 20px; 
-            padding: 25px; 
-            border: 1px solid #222; 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .car-item:hover { 
-            transform: scale(1.05);
-            border-color: var(--neon-yellow);
-            box-shadow: 0 15px 40px rgba(255, 204, 0, 0.15);
-        }
-
-        .car-item::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,204,0,0.05) 0%, rgba(0,0,0,0) 70%);
-            opacity: 0; transition: 0.4s;
-        }
-        .car-item:hover::before { opacity: 1; }
-
-        /* صور السيارات الملكية */
-        .car-item img { 
-            width: 100%; 
-            height: 180px; 
-            object-fit: contain; 
-            margin-bottom: 20px;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
-            position: relative;
-            z-index: 2;
-        }
-
-        .car-item h3 { font-weight: 700; font-size: 22px; margin: 0; color: #fff; }
-        .car-item p { color: var(--text-gray); font-size: 14px; margin: 5px 0 20px 0; text-transform: uppercase; }
-
-        /* السعر والزر */
-        .price-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid #222;
-            padding-top: 20px;
-            margin-top: auto;
-        }
-
-        .uc-cost { font-size: 24px; color: #4ff34f; font-weight: 900; }
-
-        .buy-action-btn { 
-            background: linear-gradient(135deg, #ffcc00 0%, #ff9900 100%);
-            color: #000;
-            border: none; 
-            padding: 12px 25px; 
-            border-radius: 10px; 
-            font-weight: 900; 
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
-
-        .buy-action-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(255, 153, 0, 0.4); }
-
-        /* إشعار النجاح */
-        #notification-popup {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #2ecc71;
-            color: white;
-            padding: 15px 30px;
-            border-radius: 15px;
-            font-weight: bold;
-            display: none;
-            z-index: 9999;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            animation: slideIn 0.5s ease;
-        }
-
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
     </style>
 </head>
 <body>
 
-<audio id="purchase-sound" src="https://www.soundjay.com/buttons/sounds/button-09.mp3" preload="auto"></audio>
-
-<div id="notification-popup">تم شراء السيارة وإضافتها لمرآبك! ✅</div>
-
-<div class="main-header">
-    <div class="logo-text">PUBG <span>PREMIUM</span></div>
-    <div class="uc-balance-box">
-        <img src="https://img.icons8.com/color/30/coins.png" alt="coin">
-        <span id="uc-balance-display">5000</span> UC
-    </div>
+<div class="balance-bar">
+    <div>رصيد العملات: <span id="balance">1000</span> UC</div>
+    <div style="font-size: 12px;">العطلة: دولار أمريكي</div>
 </div>
 
-<div class="shop-grid" id="main-shop-grid">
+<div class="header-section">
+    <h1>كروت سيارات ببجي</h1>
+    <div class="breadcrumb">الرئيسية > كروت سيارات ببجي</div>
+</div>
+
+<div class="container" id="market">
     </div>
 
 <script>
-    // قائمة بأحدث وأندر سيارات ببجي مع روابط صور شغالة 100%
-    const pubgCars = [
-        { name: "McLaren 570S", type: "Lunar White", img: "https://www.pubgmobile.com/images/event/car_skin/car4.png" },
-        { name: "Lamborghini Aventador", type: "SVJ Vermillion", img: "https://www.pubgmobile.com/images/event/car_skin/car5.png" },
-        { name: "Koenigsegg Jesko", type: "Silver Gray", img: "https://www.pubgmobile.com/images/event/car_skin/car3.png" },
-        { name: "Aston Martin DBS", img: "https://www.pubgmobile.com/images/event/car_skin/car6.png" },
-        { name: "Dodge Challenger", type: "SRT Hellcat", img: "https://www.pubgmobile.com/images/event/car_skin/car7.png" },
-        { name: "Bugatti La Voiture Noire", img: "https://www.pubgmobile.com/images/event/car_skin/car9.png" }
+    const cars = [
+        { name: "مكلارين خضراء", type: "3 كروت", price: 478, img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/mclaren.png" },
+        { name: "مكلارين بنفسجي", type: "3 كروت", price: 538, img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/mclaren.png" },
+        { name: "داشيا سوداء", type: "كرت واحد", price: 109, img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/dodge.png" },
+        { name: "مكلارين ليموني", type: "كرت واحد", price: 169, img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/mclaren.png" },
+        { name: "جيب ذهبي", type: "كرت واحد", price: 109, img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/aston.png" },
+        { name: "مكلارين حمراء", type: "كرت واحد", price: 109, img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/mclaren.png" }
     ];
 
-    let currentBalance = localStorage.getItem('user_uc_v3') ? parseInt(localStorage.getItem('user_uc_v3')) : 5000;
-    document.getElementById('uc-balance-display').innerText = currentBalance;
+    let myUC = 5000;
+    const market = document.getElementById('market');
 
-    const grid = document.getElementById('main-shop-grid');
-
-    pubgCars.forEach((car, index) => {
-        const price = 60 + (index * 60);
-        
-        const cardHtml = `
-            <div class="car-item">
-                <img src="${car.img}" onerror="this.src='https://img.icons8.com/fluency/180/car--v1.png'; this.style.opacity=0.3;" alt="${car.name}">
-                <h3>${car.name}</h3>
-                <p>${car.type || 'Mythic Item'}</p>
-                <div class="price-section">
-                    <div class="uc-cost">${price} UC</div>
-                    <button class="buy-action-btn" onclick="buyItem(${price})">شراء الآن</button>
+    cars.forEach((car, index) => {
+        market.innerHTML += `
+            <div class="card-box">
+                <div class="card-top">
+                    <div class="card-hole"></div>
+                    <div class="tag-badge">${car.type}</div>
+                    <img src="${car.img}" class="car-image">
+                    <div class="car-label">${car.name.split(' ')[0]}</div>
+                </div>
+                <div class="card-info">
+                    <div class="card-title">كرت سيارة لمبورجيني</div>
+                    <div class="card-price">$ ${car.price}.00</div>
+                    <button class="buy-btn" onclick="buy(${car.price})">
+                        <span>+</span> أضف للسلة
+                    </button>
                 </div>
             </div>
         `;
-        grid.innerHTML += cardHtml;
     });
 
-    function buyItem(price) {
-        if (currentBalance >= price) {
-            // تشغيل الصوت
-            document.getElementById('purchase-sound').play();
-            
-            // خصم العملات
-            currentBalance -= price;
-            updateUI();
-            
-            // إظهار التنبيه
-            const popup = document.getElementById('notification-popup');
-            popup.style.display = 'block';
-            setTimeout(() => { popup.style.display = 'none'; }, 2500);
+    function buy(cost) {
+        if (myUC >= cost) {
+            myUC -= cost;
+            document.getElementById('balance').innerText = myUC;
+            alert("تمت الإضافة للسلة بنجاح!");
         } else {
-            alert("رصيد UC غير كافٍ! يرجى الشحن أولاً.");
+            alert("رصيدك غير كافٍ!");
         }
-    }
-
-    function updateUI() {
-        document.getElementById('uc-balance-display').innerText = currentBalance;
-        localStorage.setItem('user_uc_v3', currentBalance);
     }
 </script>
 
