@@ -3,215 +3,220 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر كروت ببجي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>متجر كروت سيارات ببجي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --main-purple: #6c40b5;
-            --dark-purple: #4a2a8a;
-            --bg-color: #f4f4f9;
+            --purple-main: #6c40b5; /* اللون البنفسجي للرأس والزر */
+            --purple-card: #5a32a3; /* لون الكرت العلوي */
+            --bg-body: #f8f9fc;
         }
 
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: var(--bg-color);
+            background-color: var(--bg-body);
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
 
-        .header-section {
+        /* الشريط العلوي البنفسجي */
+        .top-nav {
+            background: var(--purple-main);
+            color: white;
+            padding: 12px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .balance-info span { font-weight: 800; color: #ffcc00; font-size: 18px; }
+
+        /* عنوان الصفحة */
+        .page-header {
+            padding: 40px 5% 20px;
             text-align: right;
-            padding: 20px 5%;
-            background: white;
-            margin-bottom: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        h1 { color: #333; margin: 0; font-size: 24px; }
-        .breadcrumb { font-size: 13px; color: #888; margin-top: 5px; }
+        .page-header h1 { margin: 0; font-size: 26px; color: #333; }
+        .breadcrumb { font-size: 13px; color: #999; margin-top: 5px; }
 
-        .container {
+        /* حاوية الكروت */
+        .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 25px;
+            padding: 20px 5% 50px;
+            max-width: 1300px;
             margin: auto;
         }
 
-        /* تصميم الكرت (Gift Card) */
-        .card-box {
+        /* تصميم الكرت الواحد */
+        .card {
             background: white;
-            border-radius: 15px;
+            border-radius: 12px;
+            border: 1px solid #e1e4e8;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: 0.3s;
-            border: 1px solid #eee;
-            position: relative;
+            transition: 0.3s ease;
         }
 
-        .card-box:hover { transform: translateY(-5px); }
+        .card:hover { transform: translateY(-8px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
 
-        /* الجزء العلوي الملون (المغلف) */
-        .card-top {
-            background: var(--main-purple);
-            height: 180px;
+        /* الجزء البنفسجي من الكرت */
+        .card-visual {
+            background: var(--purple-card);
+            height: 200px;
             position: relative;
-            padding: 15px;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            background-image: linear-gradient(45deg, rgba(255,255,255,0.05) 25%, transparent 25%);
+            background-image: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
         }
 
-        /* ثقب تعليق الكرت */
-        .card-hole {
-            width: 40px;
-            height: 12px;
-            background: var(--dark-purple);
-            border-radius: 20px;
+        /* الفتحة العلوية للكرت */
+        .card-slot {
+            width: 45px;
+            height: 14px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
             position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 12px;
         }
 
-        .tag-badge {
+        /* شارة عدد الكروت (الزاوية) */
+        .card-count-badge {
             position: absolute;
-            top: 15px;
-            right: 10px;
-            background: #ff6b6b;
+            top: 12px;
+            right: 12px;
+            background: #ff5e5e;
             color: white;
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 5px;
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-weight: 600;
         }
 
-        .car-image {
-            width: 140px;
-            height: auto;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
+        .car-img {
+            width: 85%;
+            filter: drop-shadow(0 8px 12px rgba(0,0,0,0.4));
+            transition: 0.4s;
         }
 
-        .car-label {
+        .card:hover .car-img { transform: scale(1.1); }
+
+        .car-type-label {
             position: absolute;
-            bottom: 10px;
-            right: 15px;
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
+            bottom: 15px;
+            left: 15px;
+            color: rgba(255,255,255,0.8);
+            font-size: 16px;
+            font-weight: 800;
         }
 
-        /* الجزء السفلي (السعر والزر) */
-        .card-info {
+        /* تفاصيل الكرت السفلي */
+        .card-details {
             padding: 15px;
             text-align: center;
         }
 
-        .card-title {
-            font-size: 14px;
-            color: #444;
-            margin-bottom: 5px;
-            font-weight: bold;
+        .card-name {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 8px;
+            display: block;
         }
 
         .card-price {
-            color: var(--main-purple);
-            font-weight: bold;
-            font-size: 18px;
+            font-size: 20px;
+            font-weight: 800;
+            color: #333;
             margin-bottom: 15px;
         }
 
-        .buy-btn {
-            background: var(--main-purple);
+        /* زر أضف للسلة */
+        .btn-add {
+            background: var(--purple-main);
             color: white;
             border: none;
-            padding: 10px;
             width: 100%;
+            padding: 12px;
             border-radius: 8px;
+            font-weight: 700;
             cursor: pointer;
-            font-weight: bold;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            transition: 0.3s;
+            gap: 10px;
+            transition: 0.2s;
         }
 
-        .buy-btn:hover { background: var(--dark-purple); }
-
-        /* شريط الرصيد */
-        .balance-bar {
-            background: var(--main-purple);
-            color: white;
-            padding: 10px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+        .btn-add:hover { background: #522d94; }
+        .btn-add span { font-size: 20px; }
     </style>
 </head>
 <body>
 
-<div class="balance-bar">
-    <div>رصيد العملات: <span id="balance">1000</span> UC</div>
-    <div style="font-size: 12px;">العطلة: دولار أمريكي</div>
-</div>
+<nav class="top-nav">
+    <div class="balance-info">العملة: <span>USD</span> | رصيدك: <span id="balance">5000</span> UC</div>
+    <div>القائمة ☰</div>
+</nav>
 
-<div class="header-section">
+<div class="page-header">
     <h1>كروت سيارات ببجي</h1>
-    <div class="breadcrumb">الرئيسية > كروت سيارات ببجي</div>
+    <div class="breadcrumb">الرئيسية / كروت سيارات ببجي</div>
 </div>
 
-<div class="container" id="market">
+<div class="cards-grid" id="market">
     </div>
 
 <script>
-    const cars = [
-        { name: "مكلارين خضراء", type: "3 كروت", price: 478, img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/mclaren.png" },
-        { name: "مكلارين بنفسجي", type: "3 كروت", price: 538, img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/mclaren.png" },
-        { name: "داشيا سوداء", type: "كرت واحد", price: 109, img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/dodge.png" },
-        { name: "مكلارين ليموني", type: "كرت واحد", price: 169, img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/mclaren.png" },
-        { name: "جيب ذهبي", type: "كرت واحد", price: 109, img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/aston.png" },
-        { name: "مكلارين حمراء", type: "كرت واحد", price: 109, img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/mclaren.png" }
+    const carItems = [
+        { name: "مكلارين ليموني", price: 478, cards: "3 كروت", img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/mclaren.png" },
+        { name: "مكلارين وردي", price: 538, cards: "3 كروت", img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/mclaren.png" },
+        { name: "داشيا كربون", price: 109, cards: "كرت واحد", img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/dodge.png" },
+        { name: "مكلارين أخضر", price: 169, cards: "كرت واحد", img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/mclaren.png" },
+        { name: "جيب ذهبي", price: 299, cards: "كرت واحد", img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/aston.png" },
+        { name: "لمبورجيني حمراء", price: 610, cards: "3 كروت", img: "https://raw.githubusercontent.com/A7med-Ragaa/PUBG-Car-Images/main/lambo.png" }
     ];
 
     let myUC = 5000;
-    const market = document.getElementById('market');
+    const grid = document.getElementById('market');
 
-    cars.forEach((car, index) => {
-        market.innerHTML += `
-            <div class="card-box">
-                <div class="card-top">
-                    <div class="card-hole"></div>
-                    <div class="tag-badge">${car.type}</div>
-                    <img src="${car.img}" class="car-image">
-                    <div class="car-label">${car.name.split(' ')[0]}</div>
+    function loadCards() {
+        grid.innerHTML = '';
+        carItems.forEach((car, index) => {
+            grid.innerHTML += `
+                <div class="card">
+                    <div class="card-visual">
+                        <div class="card-slot"></div>
+                        <div class="card-count-badge">${car.cards}</div>
+                        <img src="${car.img}" class="car-img" onerror="this.style.opacity=0">
+                        <div class="car-type-label">${car.name.split(' ')[0]}</div>
+                    </div>
+                    <div class="card-details">
+                        <span class="card-name">كرت سيارة ببجي - ${car.name}</span>
+                        <div class="card-price">$ ${car.price}.00</div>
+                        <button class="btn-add" onclick="processOrder(${car.price})">
+                            <span>+</span> أضف للسلة
+                        </button>
+                    </div>
                 </div>
-                <div class="card-info">
-                    <div class="card-title">كرت سيارة لمبورجيني</div>
-                    <div class="card-price">$ ${car.price}.00</div>
-                    <button class="buy-btn" onclick="buy(${car.price})">
-                        <span>+</span> أضف للسلة
-                    </button>
-                </div>
-            </div>
-        `;
-    });
+            `;
+        });
+    }
 
-    function buy(cost) {
+    function processOrder(cost) {
         if (myUC >= cost) {
             myUC -= cost;
             document.getElementById('balance').innerText = myUC;
-            alert("تمت الإضافة للسلة بنجاح!");
+            alert("✅ تمت الإضافة للسلة! رصيدك المتبقي: " + myUC + " UC");
         } else {
-            alert("رصيدك غير كافٍ!");
+            alert("❌ عذراً، رصيدك غير كافٍ لإتمام هذه العملية.");
         }
     }
+
+    loadCards();
 </script>
 
 </body>
