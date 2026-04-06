@@ -3,211 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ببجي موبايل | معرض السيارات الملكي</title>
+    <title>PUBG Mobile Car Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --gold: #ffcc00;
-            --bg-gradient: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0a 100%);
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --dark-bg: #0b0b0b;
+            --card-bg: #161616;
+            --text-gray: #b3b3b3;
         }
 
         body { 
             font-family: 'Cairo', sans-serif; 
-            background: var(--bg-gradient);
+            background-color: var(--dark-bg); 
             color: white; 
             margin: 0;
-            min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* رأس الصفحة بتصميم زجاجي */
-        .navbar {
-            backdrop-filter: blur(15px);
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px 5%;
-            display: flex;
-            justify-content: space-between;
+        /* رأس الصفحة */
+        .header { 
+            background: linear-gradient(180deg, #1a1a1a 0%, #0b0b0b 100%);
+            padding: 40px 20px; 
+            border-bottom: 2px solid var(--gold); 
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        h1 { font-weight: 900; letter-spacing: 2px; margin: 0; color: #fff; text-shadow: 2px 2px 10px rgba(255,204,0,0.3); }
+
+        /* صندوق الرصيد */
+        .balance-card {
+            display: inline-flex;
             align-items: center;
-            border-bottom: 1px solid var(--glass-border);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            background: rgba(255, 204, 0, 0.1);
+            padding: 10px 25px;
+            border-radius: 12px;
+            border: 1px solid var(--gold);
+            margin-top: 20px;
         }
 
-        .logo { font-weight: 900; font-size: 24px; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; }
+        .balance-card span { font-size: 24px; color: var(--gold); font-weight: bold; margin: 0 10px; }
 
-        .uc-badge {
-            background: linear-gradient(90deg, #ffcc00, #f39c12);
-            color: #000;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-weight: 900;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
-        }
-
-        /* شبكة السيارات */
-        .shop-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            padding: 40px 5%;
-            max-width: 1400px;
+        /* شبكة المنتجات */
+        .container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; 
+            padding: 50px 20px; 
+            max-width: 1200px; 
             margin: auto;
         }
 
-        .car-card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 20px;
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 20px; 
+            padding: 25px; 
+            border: 1px solid #222; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             text-align: center;
-            transition: 0.4s;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(5px);
         }
 
-        .car-card:hover {
-            background: rgba(255, 255, 255, 0.1);
+        .card:hover { 
+            transform: scale(1.05);
             border-color: var(--gold);
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 40px rgba(255, 204, 0, 0.15);
         }
 
-        .car-card img {
-            width: 100%;
-            height: 160px;
-            object-fit: contain;
-            margin-bottom: 15px;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
-            transition: 0.5s;
-        }
-
-        .car-card:hover img { transform: scale(1.1) rotate(-3deg); }
-
-        .car-name { font-size: 20px; font-weight: 700; margin-bottom: 5px; }
-        .car-rarity { font-size: 12px; color: var(--gold); text-transform: uppercase; margin-bottom: 15px; display: block; }
-
-        .price-tag {
-            font-size: 24px;
-            font-weight: 900;
-            color: #fff;
+        /* تعديل الصور لتعمل مع ملفات GitHub */
+        .card img { 
+            width: 100%; 
+            height: 180px; 
+            object-fit: contain; 
             margin-bottom: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 5px;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
         }
 
-        .buy-btn {
-            background: transparent;
-            border: 2px solid var(--gold);
-            color: var(--gold);
-            padding: 12px;
-            border-radius: 12px;
-            width: 100%;
-            cursor: pointer;
-            font-weight: 700;
-            transition: 0.3s;
-            text-transform: uppercase;
-        }
+        .car-title { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
 
-        .buy-btn:hover {
+        .price-box { font-size: 20px; color: #44ff44; margin-bottom: 25px; font-weight: bold; }
+
+        button { 
             background: var(--gold);
             color: #000;
-            box-shadow: 0 0 15px var(--gold);
+            border: none; 
+            padding: 15px; 
+            border-radius: 10px; 
+            font-weight: 900; 
+            width: 100%; 
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
         }
 
-        /* إشعار النجاح */
-        #toast {
+        button:hover { background: #e6b800; transform: translateY(-2px); }
+
+        /* تنبيه النجاح */
+        #notification {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #27ae60;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2ecc71;
             color: white;
-            padding: 15px 30px;
-            border-radius: 15px;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-weight: bold;
             display: none;
-            animation: slideIn 0.4s ease;
-            z-index: 2000;
+            z-index: 9999;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
         }
-
-        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
     </style>
 </head>
 <body>
 
-<audio id="clickSound" src="https://www.soundjay.com/buttons/sounds/button-09.mp3" preload="auto"></audio>
+<div id="notification">تم شراء السيارة وإضافتها للمرآب! ✅</div>
 
-<nav class="navbar">
-    <div class="logo">PUBG CAR CENTER</div>
-    <div class="uc-badge">
-        <span>رصيدك:</span>
-        <span id="uc-balance">5000</span>
-        <span>UC</span>
+<div class="header">
+    <h1>PUBG CARS PREMIUM SHOP</h1>
+    <div class="balance-card">
+        <img src="https://img.icons8.com/color/30/coins.png" alt="coin">
+        <span id="uc-amount">1000</span> UC
     </div>
-</nav>
+</div>
 
-<div class="shop-container" id="carsGrid"></div>
-
-<div id="toast">تم فتح الصندوق بنجاح! 📦</div>
+<div class="container" id="main-shop">
+    </div>
 
 <script>
-    const cars = [
-        { name: "Lamborghini Aventador", img: "https://www.pubgmobile.com/images/event/car_skin/car5.png" },
-        { name: "McLaren 570S", img: "https://www.pubgmobile.com/images/event/car_skin/car4.png" },
-        { name: "Koenigsegg Jesko", img: "https://www.pubgmobile.com/images/event/car_skin/car3.png" },
-        { name: "Aston Martin DBS", img: "https://www.pubgmobile.com/images/event/car_skin/car6.png" },
-        { name: "Dodge Challenger", img: "https://www.pubgmobile.com/images/event/car_skin/car7.png" },
-        { name: "Bugatti La Voiture", img: "https://www.pubgmobile.com/images/event/car_skin/car9.png" },
-        { name: "Pagani Imola", img: "https://www.pubgmobile.com/images/event/car_skin/car8.png" },
-        { name: "Bentley Mulliner", img: "https://www.pubgmobile.com/images/event/car_skin/car10.png" }
+    // قائمة السيارات مع زيادة السعر 60 لكل وحدة
+    // ملاحظة: استبدل "car1.png" بأسماء الصور التي ترفعها على GitHub
+    const carsData = [
+        { name: "Dacia اليقطين", img: "car1.png" },
+        { name: "UAZ الوحش Godzilla", img: "car2.png" },
+        { name: "McLaren 570S", img: "car3.png" },
+        { name: "Lamborghini SVJ", img: "car4.png" },
+        { name: "Koenigsegg Jesko", img: "car5.png" },
+        { name: "Aston Martin Valkyrie", img: "car6.png" },
+        { name: "Bugatti Chiron", img: "car7.png" },
+        { name: "Pagani Imola", img: "car8.png" }
     ];
 
-    let uc = localStorage.getItem('pubg_uc') ? parseInt(localStorage.getItem('pubg_uc')) : 5000;
-    document.getElementById('uc-balance').innerText = uc;
+    let currentUC = localStorage.getItem('userUC') ? parseInt(localStorage.getItem('userUC')) : 1000;
+    document.getElementById('uc-amount').innerText = currentUC;
 
-    const grid = document.getElementById('carsGrid');
+    const shop = document.getElementById('main-shop');
 
-    cars.forEach((car, index) => {
+    carsData.forEach((car, index) => {
         const price = 60 + (index * 60);
-        const card = document.createElement('div');
-        card.className = 'car-card';
-        card.innerHTML = `
-            <span class="car-rarity">Mythic Item</span>
-            <img src="${car.img}" alt="${car.name}">
-            <div class="car-name">${car.name}</div>
-            <div class="price-tag">${price} <small style="font-size: 12px; color: var(--gold);">UC</small></div>
-            <button class="buy-btn" onclick="processPurchase(${price})">إفتح الآن</button>
+        
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'card';
+        cardDiv.innerHTML = `
+            <img src="${car.img}" onerror="this.src='https://img.icons8.com/fluency/180/car--v1.png'" alt="${car.name}">
+            <div class="car-title">${car.name}</div>
+            <div class="price-box">${price} UC</div>
+            <button onclick="buyCar(${price})">شراء الآن</button>
         `;
-        grid.appendChild(card);
+        shop.appendChild(cardDiv);
     });
 
-    function processPurchase(cost) {
-        if (uc >= cost) {
-            // تشغيل الصوت
-            document.getElementById('clickSound').play();
-            
-            // خصم الرصيد
-            uc -= cost;
-            updateUI();
-            
-            // إظهار الإشعار
-            const t = document.getElementById('toast');
-            t.style.display = 'block';
-            setTimeout(() => t.style.display = 'none', 3000);
+    function buyCar(cost) {
+        if (currentUC >= cost) {
+            currentUC -= cost;
+            updateBalance();
+            showNotice();
         } else {
-            alert("رصيد UC غير كافٍ!");
+            alert("رصيد UC غير كافٍ! يرجى شحن حسابك.");
         }
     }
 
-    function updateUI() {
-        document.getElementById('uc-balance').innerText = uc;
-        localStorage.setItem('pubg_uc', uc);
+    function updateBalance() {
+        document.getElementById('uc-amount').innerText = currentUC;
+        localStorage.setItem('userUC', currentUC);
+    }
+
+    function showNotice() {
+        const note = document.getElementById('notification');
+        note.style.display = 'block';
+        setTimeout(() => { note.style.display = 'none'; }, 2500);
     }
 </script>
 
