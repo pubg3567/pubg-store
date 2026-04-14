@@ -2,44 +2,80 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>متجر ببجي</title>
+<title>PUBG Shop</title>
 
 <style>
 body {
+  margin:0;
   font-family: Arial;
-  background: radial-gradient(circle,#020617,#000);
+  background: linear-gradient(135deg,#020617,#0f172a);
   color:white;
   text-align:center;
 }
 
-/* الكارد */
-.card {
-  background:#111827;
-  padding:15px;
-  margin:10px;
-  border-radius:15px;
-  display:inline-block;
-  width:200px;
-  box-shadow:0 0 10px black;
-  transition:0.3s;
-}
-.card:hover {
-  transform:scale(1.05);
-  box-shadow:0 0 20px gold;
+/* العنوان */
+h1 {
+  color:#facc15;
+  margin-top:20px;
 }
 
-img {
-  width:100%;
+/* الرصيد */
+.balance {
+  background:#111827;
+  padding:10px;
+  width:200px;
+  margin:15px auto;
   border-radius:10px;
+}
+
+/* السيارات */
+.shop {
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.card {
+  background:#1f2937;
+  width:220px;
+  border-radius:15px;
+  overflow:hidden;
+  transition:0.3s;
+  box-shadow:0 0 10px black;
+}
+
+.card:hover {
+  transform:translateY(-5px);
+  box-shadow:0 0 20px #facc15;
+}
+
+.card img {
+  width:100%;
+  height:140px;
+  object-fit:cover;
+}
+
+.card h3 {
+  margin:10px 0 5px;
+}
+
+.card p {
+  color:#22c55e;
 }
 
 button {
-  padding:10px;
   background:#22c55e;
   border:none;
-  border-radius:10px;
+  padding:10px;
+  width:100%;
   color:white;
   cursor:pointer;
+  font-size:16px;
+}
+
+button:hover {
+  background:#16a34a;
 }
 
 /* popup */
@@ -47,51 +83,54 @@ button {
   position:fixed;
   top:0;left:0;
   width:100%;height:100%;
-  background:rgba(0,0,0,0.85);
+  background:rgba(0,0,0,0.8);
   display:none;
-  justify-content:center;
   align-items:center;
+  justify-content:center;
 }
 
 .popup-box {
   background:#020617;
-  padding:25px;
-  border-radius:20px;
-  width:320px;
-  box-shadow:0 0 25px gold;
-  animation:fadeIn 0.3s;
+  padding:20px;
+  border-radius:15px;
+  width:300px;
+  box-shadow:0 0 20px #facc15;
+  animation:pop 0.25s ease;
 }
 
-@keyframes fadeIn {
+@keyframes pop {
   from {transform:scale(0.7);opacity:0;}
   to {transform:scale(1);opacity:1;}
+}
+
+.popup-box img {
+  width:100%;
+  border-radius:10px;
 }
 
 input {
   width:90%;
   padding:10px;
-  border-radius:10px;
-  border:none;
   margin-top:10px;
+  border:none;
+  border-radius:8px;
 }
 
 /* نجاح */
 .success {
   position:fixed;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:#111827;
-  padding:25px;
-  border-radius:20px;
-  box-shadow:0 0 30px #22c55e;
+  top:20px;
+  right:20px;
+  background:#22c55e;
+  padding:15px;
+  border-radius:10px;
   display:none;
-  animation:pop 0.4s;
+  animation:slide 0.3s;
 }
 
-@keyframes pop {
-  from {transform:translate(-50%,-60%) scale(0.7);}
-  to {transform:translate(-50%,-50%) scale(1);}
+@keyframes slide {
+  from {transform:translateX(100px);opacity:0;}
+  to {transform:translateX(0);opacity:1;}
 }
 </style>
 
@@ -99,30 +138,28 @@ input {
 
 <body>
 
-<h1 style="color:gold;">🚗 متجر ببجي</h1>
-<p>💰 رصيدك: <span id="coins">1000</span></p>
+<h1>🚗 PUBG Car Shop</h1>
 
-<div id="shop"></div>
+<div class="balance">
+💰 <span id="coins">1000</span> UC
+</div>
 
-<!-- Popup -->
+<div class="shop" id="shop"></div>
+
+<!-- popup -->
 <div class="popup" id="popup">
   <div class="popup-box">
     <img id="carImg">
     <h3 id="carName"></h3>
-    <input id="playerID" placeholder="اكتب ID اللاعب">
+    <input id="playerID" placeholder="Player ID">
     <br><br>
-    <button onclick="confirmBuy()">تأكيد</button>
-    <button onclick="closePopup()" style="background:red;">إلغاء</button>
+    <button onclick="confirmBuy()">Confirm</button>
+    <button onclick="closePopup()" style="background:red;margin-top:5px;">Cancel</button>
   </div>
 </div>
 
-<!-- نجاح -->
-<div class="success" id="successBox">
-  <h2>🎉 تم بنجاح!</h2>
-  <p id="successText"></p>
-</div>
-
-<audio id="sound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+<!-- success -->
+<div class="success" id="successBox"></div>
 
 <script>
 let coins = 1000;
@@ -132,23 +169,20 @@ let selectedCar = "";
 document.getElementById("coins").innerText = coins;
 
 let cars = [
- {name:"Buggy", img:"https://i.imgur.com/8Km9tLL.png"},
- {name:"Dacia", img:"https://i.imgur.com/Vz81P9K.png"},
- {name:"UAZ", img:"https://i.imgur.com/9Q9Z1Zm.png"},
- {name:"Mirado", img:"https://i.imgur.com/tK6sF9F.png"}
+ {name:"Buggy", price:60, img:"https://i.imgur.com/8Km9tLL.png"},
+ {name:"Dacia", price:120, img:"https://i.imgur.com/Vz81P9K.png"},
+ {name:"UAZ", price:180, img:"https://i.imgur.com/9Q9Z1Zm.png"}
 ];
 
 let shop = document.getElementById("shop");
 
-cars.forEach((car,index)=>{
-  let price = (index+1)*60;
-
+cars.forEach(car=>{
   shop.innerHTML += `
     <div class="card">
       <img src="${car.img}">
       <h3>${car.name}</h3>
-      <p>${price} عملة</p>
-      <button onclick="openPopup(${price}, '${car.name}', '${car.img}')">شراء</button>
+      <p>${car.price} UC</p>
+      <button onclick="openPopup(${car.price},'${car.name}','${car.img}')">Buy</button>
     </div>
   `;
 });
@@ -156,7 +190,6 @@ cars.forEach((car,index)=>{
 function openPopup(price,name,img){
   selectedPrice = price;
   selectedCar = name;
-
   document.getElementById("popup").style.display="flex";
   document.getElementById("carImg").src = img;
   document.getElementById("carName").innerText = name;
@@ -169,31 +202,19 @@ function closePopup(){
 function confirmBuy(){
   let id = document.getElementById("playerID").value;
 
-  if(id==""){
-    alert("❌ اكتب ID");
-    return;
-  }
+  if(id=="") return;
 
   if(coins >= selectedPrice){
     coins -= selectedPrice;
     document.getElementById("coins").innerText = coins;
 
-    document.getElementById("sound").play();
-
     closePopup();
 
-    document.getElementById("successText").innerText =
-      "تم إرسال " + selectedCar + " إلى ID: " + id;
-
     let box = document.getElementById("successBox");
+    box.innerText = "✅ Sent " + selectedCar + " to ID: " + id;
     box.style.display="block";
 
-    setTimeout(()=>{
-      box.style.display="none";
-    },3000);
-
-  } else {
-    alert("❌ رصيدك ما يكفي");
+    setTimeout(()=>{ box.style.display="none"; },3000);
   }
 }
 </script>
