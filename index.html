@@ -2,135 +2,74 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>PUBG Shop</title>
+<title>PUBG Crate</title>
 
 <style>
 body {
   margin:0;
   font-family: Arial;
-  background: linear-gradient(135deg,#020617,#0f172a);
+  background: radial-gradient(circle,#020617,#000);
   color:white;
   text-align:center;
 }
 
-/* العنوان */
 h1 {
   color:#facc15;
-  margin-top:20px;
 }
 
 /* الرصيد */
 .balance {
-  background:#111827;
-  padding:10px;
-  width:200px;
-  margin:15px auto;
+  margin:20px;
+  font-size:20px;
+}
+
+/* زر */
+.open-btn {
+  background:gold;
+  color:black;
+  padding:15px 30px;
+  border:none;
+  font-size:18px;
+  cursor:pointer;
   border-radius:10px;
 }
 
-/* السيارات */
-.shop {
+/* spin */
+.spinner {
   display:flex;
-  justify-content:center;
-  gap:20px;
-  flex-wrap:wrap;
-}
-
-.card {
-  background:#1f2937;
-  width:220px;
-  border-radius:15px;
   overflow:hidden;
-  transition:0.3s;
-  box-shadow:0 0 10px black;
+  width:320px;
+  margin:30px auto;
+  border:3px solid gold;
 }
 
-.card:hover {
-  transform:translateY(-5px);
-  box-shadow:0 0 20px #facc15;
+.track {
+  display:flex;
+  transition:transform 3s ease-out;
 }
 
-.card img {
-  width:100%;
-  height:140px;
-  object-fit:cover;
-}
-
-.card h3 {
-  margin:10px 0 5px;
-}
-
-.card p {
-  color:#22c55e;
-}
-
-button {
-  background:#22c55e;
-  border:none;
+.item {
+  width:100px;
+  margin:5px;
   padding:10px;
-  width:100%;
-  color:white;
-  cursor:pointer;
-  font-size:16px;
+  background:#1f2937;
+  border-radius:10px;
 }
 
-button:hover {
-  background:#16a34a;
-}
+.legendary { box-shadow:0 0 15px gold; }
+.epic { box-shadow:0 0 15px purple; }
+.rare { box-shadow:0 0 10px cyan; }
 
 /* popup */
-.popup {
+.result {
   position:fixed;
-  top:0;left:0;
-  width:100%;height:100%;
-  background:rgba(0,0,0,0.8);
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  background:#111827;
+  padding:25px;
+  border-radius:20px;
   display:none;
-  align-items:center;
-  justify-content:center;
-}
-
-.popup-box {
-  background:#020617;
-  padding:20px;
-  border-radius:15px;
-  width:300px;
-  box-shadow:0 0 20px #facc15;
-  animation:pop 0.25s ease;
-}
-
-@keyframes pop {
-  from {transform:scale(0.7);opacity:0;}
-  to {transform:scale(1);opacity:1;}
-}
-
-.popup-box img {
-  width:100%;
-  border-radius:10px;
-}
-
-input {
-  width:90%;
-  padding:10px;
-  margin-top:10px;
-  border:none;
-  border-radius:8px;
-}
-
-/* نجاح */
-.success {
-  position:fixed;
-  top:20px;
-  right:20px;
-  background:#22c55e;
-  padding:15px;
-  border-radius:10px;
-  display:none;
-  animation:slide 0.3s;
-}
-
-@keyframes slide {
-  from {transform:translateX(100px);opacity:0;}
-  to {transform:translateX(0);opacity:1;}
+  box-shadow:0 0 30px gold;
 }
 </style>
 
@@ -138,84 +77,77 @@ input {
 
 <body>
 
-<h1>🚗 PUBG Car Shop</h1>
+<h1>🎁 PUBG Crate Opening</h1>
 
 <div class="balance">
 💰 <span id="coins">1000</span> UC
 </div>
 
-<div class="shop" id="shop"></div>
+<button class="open-btn" onclick="openCrate()">فتح بكج (60 UC)</button>
 
-<!-- popup -->
-<div class="popup" id="popup">
-  <div class="popup-box">
-    <img id="carImg">
-    <h3 id="carName"></h3>
-    <input id="playerID" placeholder="Player ID">
-    <br><br>
-    <button onclick="confirmBuy()">Confirm</button>
-    <button onclick="closePopup()" style="background:red;margin-top:5px;">Cancel</button>
-  </div>
+<div class="spinner">
+  <div class="track" id="track"></div>
 </div>
 
-<!-- success -->
-<div class="success" id="successBox"></div>
+<div class="result" id="resultBox">
+  <h2 id="resultText"></h2>
+</div>
+
+<audio id="sound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
 <script>
 let coins = 1000;
-let selectedPrice = 0;
-let selectedCar = "";
-
 document.getElementById("coins").innerText = coins;
 
 let cars = [
- {name:"Buggy", price:60, img:"https://i.imgur.com/8Km9tLL.png"},
- {name:"Dacia", price:120, img:"https://i.imgur.com/Vz81P9K.png"},
- {name:"UAZ", price:180, img:"https://i.imgur.com/9Q9Z1Zm.png"}
+ {name:"Buggy", rarity:"rare"},
+ {name:"Dacia", rarity:"rare"},
+ {name:"UAZ", rarity:"epic"},
+ {name:"Mirado", rarity:"epic"},
+ {name:"Golden Car", rarity:"legendary"}
 ];
 
-let shop = document.getElementById("shop");
+let track = document.getElementById("track");
 
-cars.forEach(car=>{
-  shop.innerHTML += `
-    <div class="card">
-      <img src="${car.img}">
-      <h3>${car.name}</h3>
-      <p>${car.price} UC</p>
-      <button onclick="openPopup(${car.price},'${car.name}','${car.img}')">Buy</button>
-    </div>
-  `;
-});
-
-function openPopup(price,name,img){
-  selectedPrice = price;
-  selectedCar = name;
-  document.getElementById("popup").style.display="flex";
-  document.getElementById("carImg").src = img;
-  document.getElementById("carName").innerText = name;
-}
-
-function closePopup(){
-  document.getElementById("popup").style.display="none";
-}
-
-function confirmBuy(){
-  let id = document.getElementById("playerID").value;
-
-  if(id=="") return;
-
-  if(coins >= selectedPrice){
-    coins -= selectedPrice;
-    document.getElementById("coins").innerText = coins;
-
-    closePopup();
-
-    let box = document.getElementById("successBox");
-    box.innerText = "✅ Sent " + selectedCar + " to ID: " + id;
-    box.style.display="block";
-
-    setTimeout(()=>{ box.style.display="none"; },3000);
+// توليد عناصر كثيرة للسبن
+function generate(){
+  track.innerHTML="";
+  for(let i=0;i<30;i++){
+    let car = cars[Math.floor(Math.random()*cars.length)];
+    track.innerHTML += `<div class="item ${car.rarity}">${car.name}</div>`;
   }
+}
+generate();
+
+function openCrate(){
+  if(coins < 60){
+    alert("❌ ما عندك UC");
+    return;
+  }
+
+  coins -= 60;
+  document.getElementById("coins").innerText = coins;
+
+  generate();
+
+  let spin = Math.floor(Math.random()*1000)+1000;
+  track.style.transform = "translateX(-"+spin+"px)";
+
+  setTimeout(()=>{
+    let win = cars[Math.floor(Math.random()*cars.length)];
+
+    document.getElementById("sound").play();
+
+    document.getElementById("resultText").innerText =
+      "🎉 ربحت: " + win.name + " ("+win.rarity+")";
+
+    document.getElementById("resultBox").style.display="block";
+
+    setTimeout(()=>{
+      document.getElementById("resultBox").style.display="none";
+    },3000);
+
+  },3000);
 }
 </script>
 
