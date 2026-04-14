@@ -1,287 +1,156 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PUBG Mobile - معرض المركبات الملكي العالمي</title>
-    <style>
-        :root {
-            --primary: #f59e0b;
-            --primary-glow: rgba(245, 158, 11, 0.4);
-            --bg-dark: #070b14;
-            --card-bg: #111827;
-            --text-main: #f8fafc;
-        }
+<meta charset="UTF-8">
+<title>متجر ببجي</title>
 
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
+<style>
+body {
+  font-family: Arial;
+  background: linear-gradient(135deg,#020617,#0f172a);
+  color:white;
+  text-align:center;
+}
 
-        /* هيدر عملاق */
-        header {
-            width: 100%;
-            padding: 50px 20px;
-            text-align: center;
-            background: radial-gradient(circle at center, #1e293b 0%, #070b14 100%);
-            border-bottom: 1px solid #1f2937;
-        }
+h1 {
+  color:gold;
+}
 
-        h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            margin: 0;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 5px;
-            text-shadow: 0 0 20px var(--primary-glow);
-        }
+.card {
+  background:#1e293b;
+  padding:15px;
+  margin:10px;
+  border-radius:15px;
+  display:inline-block;
+  width:200px;
+  box-shadow:0 0 10px black;
+}
 
-        .balance-display {
-            display: inline-flex;
-            align-items: center;
-            background: rgba(0,0,0,0.6);
-            padding: 10px 30px;
-            border-radius: 100px;
-            border: 2px solid var(--primary);
-            margin-top: 25px;
-            box-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
-        }
+button {
+  padding:10px;
+  background:#22c55e;
+  color:white;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
 
-        .balance-value { font-size: 2rem; font-weight: 900; color: var(--primary); margin-left: 10px; }
+/* النافذة */
+.popup {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.8);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
 
-        /* نظام الفلترة (الفئات) */
-        .tabs {
-            margin: 40px 0;
-            display: flex;
-            gap: 15px;
-        }
+.popup-box {
+  background:#111827;
+  padding:25px;
+  border-radius:20px;
+  width:300px;
+  box-shadow:0 0 20px gold;
+  animation:scaleIn 0.3s ease;
+}
 
-        .tab-btn {
-            background: #1f2937;
-            border: 1px solid #374151;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
+@keyframes scaleIn {
+  from {transform:scale(0.7);}
+  to {transform:scale(1);}
+}
 
-        .tab-btn.active {
-            background: var(--primary);
-            color: black;
-            border-color: var(--primary);
-            box-shadow: 0 0 15px var(--primary-glow);
-        }
+input {
+  width:90%;
+  padding:10px;
+  margin:10px;
+  border-radius:10px;
+  border:none;
+}
 
-        /* شبكة المنتجات */
-        .shop-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-            width: 95%;
-            max-width: 1400px;
-            padding-bottom: 100px;
-        }
+.close {
+  background:red;
+  margin-top:10px;
+}
+</style>
 
-        .card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            border: 1px solid #1f2937;
-            overflow: hidden;
-            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
-        }
-
-        .img-container {
-            height: 180px;
-            background: #000;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .card-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.8;
-            transition: 0.5s;
-        }
-
-        .card:hover .card-img { opacity: 1; transform: scale(1.1); }
-
-        .category-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.7);
-            padding: 4px 12px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            color: var(--primary);
-            border: 1px solid var(--primary);
-        }
-
-        .info { padding: 20px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; }
-        .name { font-size: 1.2rem; font-weight: bold; margin-bottom: 15px; height: 3rem; }
-        .price { color: var(--primary); font-size: 1.3rem; font-weight: 800; margin-bottom: 20px; }
-
-        .buy-btn {
-            width: 100%;
-            background: var(--primary);
-            color: black;
-            border: none;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .buy-btn:hover { background: #fbbf24; transform: scale(1.02); }
-        .buy-btn:active { transform: scale(0.98); }
-
-        /* التنبيهات */
-        #toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 15px 40px;
-            border-radius: 12px;
-            font-weight: bold;
-            display: none;
-            z-index: 1000;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-        }
-    </style>
 </head>
+
 <body>
 
-    <header>
-        <h1>PUBG GLOBAL GARAGE</h1>
-        <div class="balance-display">
-            <span class="balance-value" id="balance">5000</span>
-            <span>UC</span>
-        </div>
-    </header>
+<h1>🚗 متجر ببجي</h1>
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="filterItems('all', this)">الكل</button>
-        <button class="tab-btn" onclick="filterItems('car', this)">سيارات</button>
-        <button class="tab-btn" onclick="filterItems('bike', this)">دراجات</button>
+<p>💰 رصيدك: <span id="coins">1000</span></p>
+
+<div id="shop"></div>
+
+<!-- النافذة -->
+<div class="popup" id="popup">
+  <div class="popup-box">
+    <h3>🎮 إدخال ID اللاعب</h3>
+    <input type="text" id="playerID" placeholder="اكتب ID هنا">
+    <br>
+    <button onclick="confirmBuy()">تأكيد الشراء</button>
+    <button class="close" onclick="closePopup()">إلغاء</button>
+  </div>
+</div>
+
+<script>
+let coins = 1000;
+let selectedPrice = 0;
+
+document.getElementById("coins").innerText = coins;
+
+let cars = ["Buggy","Dacia","UAZ","Mirado"];
+let shop = document.getElementById("shop");
+
+// عرض السيارات
+for(let i=0;i<cars.length;i++){
+  let price = (i+1)*60;
+
+  shop.innerHTML += `
+    <div class="card">
+      <h3>${cars[i]}</h3>
+      <p>${price} عملة</p>
+      <button onclick="openPopup(${price})">شراء</button>
     </div>
+  `;
+}
 
-    <div class="shop-grid" id="shop">
-        </div>
+// فتح النافذة
+function openPopup(price){
+  selectedPrice = price;
+  document.getElementById("popup").style.display = "flex";
+}
 
-    <div id="toast"></div>
+// غلق
+function closePopup(){
+  document.getElementById("popup").style.display = "none";
+}
 
-    <script>
-        // بيانات 24 مركبة (12 سيارة و 12 دراجة)
-        const items = [
-            // السيارات
-            { name: "لامبورغيني سيان - البرتقالية", price: 600, type: "car", img: "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=80&w=400" },
-            { name: "تيسلا موديل S - النسخة السوداء", price: 450, type: "car", img: "https://images.unsplash.com/photo-1617788138017-80ad40651399?auto=format&fit=crop&q=80&w=400" },
-            { name: "مكلارين 570S - الصفراء", price: 550, type: "car", img: "https://images.unsplash.com/photo-1592198084033-aade902d1aae?auto=format&fit=crop&q=80&w=400" },
-            { name: "بوغاتي شيرون - الأسطورة", price: 900, type: "car", img: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&q=80&w=400" },
-            { name: "داسيا 1300 - الكلاسيكية", price: 100, type: "car", img: "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&q=80&w=400" },
-            { name: "UAZ - المدرعة", price: 250, type: "car", img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=400" },
-            { name: "كوينيجسيج - الفضية", price: 850, type: "car", img: "https://images.unsplash.com/photo-1621135802920-133df287f89c?auto=format&fit=crop&q=80&w=400" },
-            { name: "دودج تشالنجر - الحمراء", price: 400, type: "car", img: "https://images.unsplash.com/photo-1532581291347-9c39cf10a73c?auto=format&fit=crop&q=80&w=400" },
-            { name: "جيب كومباس - الصحراء", price: 300, type: "car", img: "https://images.unsplash.com/photo-1539100102054-0185683e35b1?auto=format&fit=crop&q=80&w=400" },
-            { name: "فيراري 488 - إيطاليا", price: 700, type: "car", img: "https://images.unsplash.com/photo-1592198084033-aade902d1aae?auto=format&fit=crop&q=80&w=400" },
-            { name: "مرسيدس G-Wagon", price: 650, type: "car", img: "https://images.unsplash.com/photo-1520031441872-265e4ff70366?auto=format&fit=crop&q=80&w=400" },
-            { name: "بورشه 911 - التوربو", price: 600, type: "car", img: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=400" },
+// تأكيد الشراء
+function confirmBuy(){
+  let id = document.getElementById("playerID").value;
 
-            // الدراجات
-            { name: "دراجة الشبح - النارية", price: 120, type: "bike", img: "https://images.unsplash.com/photo-1558981403-c5f91cbba527?auto=format&fit=crop&q=80&w=400" },
-            { name: "هارلي ديفيدسون - المطور", price: 350, type: "bike", img: "https://images.unsplash.com/photo-1558981403-c5f91cbba527?auto=format&fit=crop&q=80&w=400" },
-            { name: "دوكاتي بانجالي - 3D", price: 400, type: "bike", img: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80&w=400" },
-            { name: "كاواساكي نينجا - الخضراء", price: 380, type: "bike", img: "https://images.unsplash.com/photo-1444491741275-3747c53c99b4?auto=format&fit=crop&q=80&w=400" },
-            { name: "بي إم دبليو S1000RR", price: 420, type: "bike", img: "https://images.unsplash.com/photo-1614165933026-0750f9029226?auto=format&fit=crop&q=80&w=400" },
-            { name: "دراجة الثلج - القطبية", price: 150, type: "bike", img: "https://images.unsplash.com/photo-1517406833235-97e3240e0600?auto=format&fit=crop&q=80&w=400" },
-            { name: "ياماها R1 - الزرقاء", price: 390, type: "bike", img: "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&q=80&w=400" },
-            { name: "دراجة الترايل - الجبلية", price: 200, type: "bike", img: "https://images.unsplash.com/photo-1502744691474-9521b5b30c08?auto=format&fit=crop&q=80&w=400" },
-            { name: "فسبا - المدينة", price: 80, type: "bike", img: "https://images.unsplash.com/photo-1497501849790-78f74380d9d3?auto=format&fit=crop&q=80&w=400" },
-            { name: "دراجة الطرق الوعرة", price: 180, type: "bike", img: "https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?auto=format&fit=crop&q=80&w=400" },
-            { name: "سوزوكي هايابوسا", price: 440, type: "bike", img: "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80&w=400" },
-            { name: "دراجة البرق - الكهربائية", price: 500, type: "bike", img: "https://images.unsplash.com/photo-1609630875171-b1321377ee65?auto=format&fit=crop&q=80&w=400" }
-        ];
+  if(id == ""){
+    alert("❌ اكتب ID");
+    return;
+  }
 
-        let balance = localStorage.getItem('pubg_balance') ? parseInt(localStorage.getItem('pubg_balance')) : 5000;
-        const shop = document.getElementById('shop');
-        const balanceEl = document.getElementById('balance');
+  if(coins >= selectedPrice){
+    coins -= selectedPrice;
+    document.getElementById("coins").innerText = coins;
 
-        function updateUI() {
-            balanceEl.innerText = balance;
-            localStorage.setItem('pubg_balance', balance);
-        }
+    alert("✅ تم إرسال السيارة إلى ID: " + id);
 
-        function showToast(msg, isError = false) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.style.background = isError ? "#ef4444" : "#10b981";
-            toast.style.display = "block";
-            setTimeout(() => { toast.style.display = "none"; }, 3000);
-        }
+    closePopup();
+  } else {
+    alert("❌ رصيدك ما يكفي");
+  }
+}
+</script>
 
-        function buy(price, name) {
-            if (balance >= price) {
-                balance -= price;
-                updateUI();
-                showToast(`مبروك! تم امتلاك ${name} بنجاح ✅`);
-            } else {
-                showToast(`رصيدك غير كافٍ لشراء ${name} ❌`, true);
-            }
-        }
-
-        function renderItems(filter = 'all') {
-            shop.innerHTML = "";
-            const filtered = filter === 'all' ? items : items.filter(i => i.type === filter);
-            
-            filtered.forEach(item => {
-                shop.innerHTML += `
-                    <div class="card">
-                        <div class="img-container">
-                            <span class="category-badge">${item.type === 'car' ? 'سيارة' : 'دراجة'}</span>
-                            <img src="${item.img}" class="card-img" alt="${item.name}">
-                        </div>
-                        <div class="info">
-                            <div class="name">${item.name}</div>
-                            <div class="price">${item.price} UC</div>
-                            <button class="buy-btn" onclick="buy(${item.price}, '${item.name}')">شراء الآن</button>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function filterItems(type, btn) {
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderItems(type);
-        }
-
-        // البداية
-        updateUI();
-        renderItems();
-    </script>
 </body>
 </html>
