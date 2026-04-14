@@ -7,72 +7,91 @@
 <style>
 body {
   font-family: Arial;
-  background: linear-gradient(135deg,#020617,#0f172a);
+  background: radial-gradient(circle,#020617,#000);
   color:white;
   text-align:center;
 }
 
-h1 {
-  color:gold;
-}
-
+/* الكارد */
 .card {
-  background:#1e293b;
+  background:#111827;
   padding:15px;
   margin:10px;
   border-radius:15px;
   display:inline-block;
   width:200px;
   box-shadow:0 0 10px black;
+  transition:0.3s;
+}
+.card:hover {
+  transform:scale(1.05);
+  box-shadow:0 0 20px gold;
+}
+
+img {
+  width:100%;
+  border-radius:10px;
 }
 
 button {
   padding:10px;
   background:#22c55e;
-  color:white;
   border:none;
   border-radius:10px;
+  color:white;
   cursor:pointer;
 }
 
-/* النافذة */
+/* popup */
 .popup {
   position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.8);
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,0.85);
   display:none;
   justify-content:center;
   align-items:center;
 }
 
 .popup-box {
-  background:#111827;
+  background:#020617;
   padding:25px;
   border-radius:20px;
-  width:300px;
-  box-shadow:0 0 20px gold;
-  animation:scaleIn 0.3s ease;
+  width:320px;
+  box-shadow:0 0 25px gold;
+  animation:fadeIn 0.3s;
 }
 
-@keyframes scaleIn {
-  from {transform:scale(0.7);}
-  to {transform:scale(1);}
+@keyframes fadeIn {
+  from {transform:scale(0.7);opacity:0;}
+  to {transform:scale(1);opacity:1;}
 }
 
 input {
   width:90%;
   padding:10px;
-  margin:10px;
   border-radius:10px;
   border:none;
+  margin-top:10px;
 }
 
-.close {
-  background:red;
-  margin-top:10px;
+/* نجاح */
+.success {
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#111827;
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 0 30px #22c55e;
+  display:none;
+  animation:pop 0.4s;
+}
+
+@keyframes pop {
+  from {transform:translate(-50%,-60%) scale(0.7);}
+  to {transform:translate(-50%,-50%) scale(1);}
 }
 </style>
 
@@ -80,61 +99,77 @@ input {
 
 <body>
 
-<h1>🚗 متجر ببجي</h1>
-
+<h1 style="color:gold;">🚗 متجر ببجي</h1>
 <p>💰 رصيدك: <span id="coins">1000</span></p>
 
 <div id="shop"></div>
 
-<!-- النافذة -->
+<!-- Popup -->
 <div class="popup" id="popup">
   <div class="popup-box">
-    <h3>🎮 إدخال ID اللاعب</h3>
-    <input type="text" id="playerID" placeholder="اكتب ID هنا">
-    <br>
-    <button onclick="confirmBuy()">تأكيد الشراء</button>
-    <button class="close" onclick="closePopup()">إلغاء</button>
+    <img id="carImg">
+    <h3 id="carName"></h3>
+    <input id="playerID" placeholder="اكتب ID اللاعب">
+    <br><br>
+    <button onclick="confirmBuy()">تأكيد</button>
+    <button onclick="closePopup()" style="background:red;">إلغاء</button>
   </div>
 </div>
+
+<!-- نجاح -->
+<div class="success" id="successBox">
+  <h2>🎉 تم بنجاح!</h2>
+  <p id="successText"></p>
+</div>
+
+<audio id="sound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
 <script>
 let coins = 1000;
 let selectedPrice = 0;
+let selectedCar = "";
 
 document.getElementById("coins").innerText = coins;
 
-let cars = ["Buggy","Dacia","UAZ","Mirado"];
+let cars = [
+ {name:"Buggy", img:"https://i.imgur.com/8Km9tLL.png"},
+ {name:"Dacia", img:"https://i.imgur.com/Vz81P9K.png"},
+ {name:"UAZ", img:"https://i.imgur.com/9Q9Z1Zm.png"},
+ {name:"Mirado", img:"https://i.imgur.com/tK6sF9F.png"}
+];
+
 let shop = document.getElementById("shop");
 
-// عرض السيارات
-for(let i=0;i<cars.length;i++){
-  let price = (i+1)*60;
+cars.forEach((car,index)=>{
+  let price = (index+1)*60;
 
   shop.innerHTML += `
     <div class="card">
-      <h3>${cars[i]}</h3>
+      <img src="${car.img}">
+      <h3>${car.name}</h3>
       <p>${price} عملة</p>
-      <button onclick="openPopup(${price})">شراء</button>
+      <button onclick="openPopup(${price}, '${car.name}', '${car.img}')">شراء</button>
     </div>
   `;
-}
+});
 
-// فتح النافذة
-function openPopup(price){
+function openPopup(price,name,img){
   selectedPrice = price;
-  document.getElementById("popup").style.display = "flex";
+  selectedCar = name;
+
+  document.getElementById("popup").style.display="flex";
+  document.getElementById("carImg").src = img;
+  document.getElementById("carName").innerText = name;
 }
 
-// غلق
 function closePopup(){
-  document.getElementById("popup").style.display = "none";
+  document.getElementById("popup").style.display="none";
 }
 
-// تأكيد الشراء
 function confirmBuy(){
   let id = document.getElementById("playerID").value;
 
-  if(id == ""){
+  if(id==""){
     alert("❌ اكتب ID");
     return;
   }
@@ -143,9 +178,20 @@ function confirmBuy(){
     coins -= selectedPrice;
     document.getElementById("coins").innerText = coins;
 
-    alert("✅ تم إرسال السيارة إلى ID: " + id);
+    document.getElementById("sound").play();
 
     closePopup();
+
+    document.getElementById("successText").innerText =
+      "تم إرسال " + selectedCar + " إلى ID: " + id;
+
+    let box = document.getElementById("successBox");
+    box.style.display="block";
+
+    setTimeout(()=>{
+      box.style.display="none";
+    },3000);
+
   } else {
     alert("❌ رصيدك ما يكفي");
   }
