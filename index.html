@@ -8,68 +8,73 @@
 body {
   margin:0;
   font-family: Arial;
-  background: radial-gradient(circle,#020617,#000);
+  background: radial-gradient(circle,#000,#020617);
   color:white;
   text-align:center;
 }
 
 h1 {
   color:#facc15;
+  margin-top:20px;
 }
 
-/* الرصيد */
-.balance {
-  margin:20px;
+button {
+  background:#facc15;
+  border:none;
+  padding:12px 25px;
+  font-size:18px;
+  border-radius:10px;
+  cursor:pointer;
+  margin-top:20px;
+}
+
+/* صندوق */
+.crate {
+  margin:40px auto;
+  width:200px;
+  height:200px;
+  background:linear-gradient(45deg,#444,#111);
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  box-shadow:0 0 20px gold;
   font-size:20px;
 }
 
-/* زر */
-.open-btn {
-  background:gold;
-  color:black;
-  padding:15px 30px;
-  border:none;
-  font-size:18px;
-  cursor:pointer;
-  border-radius:10px;
+/* دوران */
+.spin {
+  animation:spin 1s linear infinite;
 }
 
-/* spin */
-.spinner {
-  display:flex;
-  overflow:hidden;
-  width:320px;
-  margin:30px auto;
-  border:3px solid gold;
+@keyframes spin {
+  0% {transform:rotate(0);}
+  100% {transform:rotate(360deg);}
 }
 
-.track {
-  display:flex;
-  transition:transform 3s ease-out;
-}
-
-.item {
-  width:100px;
-  margin:5px;
-  padding:10px;
-  background:#1f2937;
-  border-radius:10px;
-}
-
-.legendary { box-shadow:0 0 15px gold; }
-.epic { box-shadow:0 0 15px purple; }
-.rare { box-shadow:0 0 10px cyan; }
-
-/* popup */
+/* النتيجة */
 .result {
-  position:fixed;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  background:#111827;
-  padding:25px;
-  border-radius:20px;
   display:none;
-  box-shadow:0 0 30px gold;
+  margin-top:20px;
+  animation:pop 0.4s;
+}
+
+@keyframes pop {
+  from {transform:scale(0.7);opacity:0;}
+  to {transform:scale(1);opacity:1;}
+}
+
+.result img {
+  width:200px;
+  border-radius:15px;
+  box-shadow:0 0 20px gold;
+}
+
+input {
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  margin-top:15px;
 }
 </style>
 
@@ -77,77 +82,57 @@ h1 {
 
 <body>
 
-<h1>🎁 PUBG Crate Opening</h1>
+<h1>🎁 PUBG Crate</h1>
 
-<div class="balance">
-💰 <span id="coins">1000</span> UC
+<div class="crate" id="crate">🎁</div>
+
+<button onclick="openCrate()">فتح بكج</button>
+
+<div class="result" id="result">
+  <h2 id="carName"></h2>
+  <img id="carImg">
+  <br>
+  <input id="playerID" placeholder="اكتب ID">
+  <br><br>
+  <button onclick="send()">إرسال</button>
 </div>
-
-<button class="open-btn" onclick="openCrate()">فتح بكج (60 UC)</button>
-
-<div class="spinner">
-  <div class="track" id="track"></div>
-</div>
-
-<div class="result" id="resultBox">
-  <h2 id="resultText"></h2>
-</div>
-
-<audio id="sound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
 
 <script>
-let coins = 1000;
-document.getElementById("coins").innerText = coins;
-
 let cars = [
- {name:"Buggy", rarity:"rare"},
- {name:"Dacia", rarity:"rare"},
- {name:"UAZ", rarity:"epic"},
- {name:"Mirado", rarity:"epic"},
- {name:"Golden Car", rarity:"legendary"}
+ {name:"Buggy", img:"https://i.imgur.com/8Km9tLL.png"},
+ {name:"Dacia", img:"https://i.imgur.com/Vz81P9K.png"},
+ {name:"UAZ", img:"https://i.imgur.com/9Q9Z1Zm.png"},
+ {name:"Mirado", img:"https://i.imgur.com/tK6sF9F.png"}
 ];
 
-let track = document.getElementById("track");
-
-// توليد عناصر كثيرة للسبن
-function generate(){
-  track.innerHTML="";
-  for(let i=0;i<30;i++){
-    let car = cars[Math.floor(Math.random()*cars.length)];
-    track.innerHTML += `<div class="item ${car.rarity}">${car.name}</div>`;
-  }
-}
-generate();
-
 function openCrate(){
-  if(coins < 60){
-    alert("❌ ما عندك UC");
+  let crate = document.getElementById("crate");
+  crate.classList.add("spin");
+
+  setTimeout(()=>{
+    crate.classList.remove("spin");
+
+    let random = Math.floor(Math.random()*cars.length);
+    let win = cars[random];
+
+    document.getElementById("result").style.display="block";
+    document.getElementById("carName").innerText = "🎉 فزت بـ " + win.name;
+    document.getElementById("carImg").src = win.img;
+
+    window.selectedCar = win.name;
+
+  },2000);
+}
+
+function send(){
+  let id = document.getElementById("playerID").value;
+
+  if(id==""){
+    alert("اكتب ID");
     return;
   }
 
-  coins -= 60;
-  document.getElementById("coins").innerText = coins;
-
-  generate();
-
-  let spin = Math.floor(Math.random()*1000)+1000;
-  track.style.transform = "translateX(-"+spin+"px)";
-
-  setTimeout(()=>{
-    let win = cars[Math.floor(Math.random()*cars.length)];
-
-    document.getElementById("sound").play();
-
-    document.getElementById("resultText").innerText =
-      "🎉 ربحت: " + win.name + " ("+win.rarity+")";
-
-    document.getElementById("resultBox").style.display="block";
-
-    setTimeout(()=>{
-      document.getElementById("resultBox").style.display="none";
-    },3000);
-
-  },3000);
+  alert("✅ تم إرسال " + selectedCar + " إلى ID: " + id);
 }
 </script>
 
