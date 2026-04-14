@@ -2,79 +2,105 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>PUBG Crate</title>
+<title>PUBG Shop</title>
 
 <style>
 body {
   margin:0;
   font-family: Arial;
-  background: radial-gradient(circle,#000,#020617);
+  background:#0f172a;
   color:white;
   text-align:center;
 }
 
 h1 {
+  margin:20px;
   color:#facc15;
-  margin-top:20px;
+}
+
+.balance {
+  background:#1e293b;
+  display:inline-block;
+  padding:10px 20px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+
+.shop {
+  display:flex;
+  justify-content:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+.card {
+  background:#1e293b;
+  width:200px;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.card img {
+  width:100%;
+  height:120px;
+  object-fit:cover;
+}
+
+.card h3 {
+  margin:10px 0 5px;
+}
+
+.card p {
+  color:#22c55e;
 }
 
 button {
-  background:#facc15;
+  width:100%;
+  padding:10px;
   border:none;
-  padding:12px 25px;
-  font-size:18px;
-  border-radius:10px;
+  background:#22c55e;
+  color:white;
   cursor:pointer;
-  margin-top:20px;
 }
 
-/* صندوق */
-.crate {
-  margin:40px auto;
-  width:200px;
-  height:200px;
-  background:linear-gradient(45deg,#444,#111);
-  border-radius:15px;
-  display:flex;
+/* popup */
+.popup {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.7);
+  display:none;
   align-items:center;
   justify-content:center;
-  box-shadow:0 0 20px gold;
-  font-size:20px;
 }
 
-/* دوران */
-.spin {
-  animation:spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {transform:rotate(0);}
-  100% {transform:rotate(360deg);}
-}
-
-/* النتيجة */
-.result {
-  display:none;
-  margin-top:20px;
-  animation:pop 0.4s;
-}
-
-@keyframes pop {
-  from {transform:scale(0.7);opacity:0;}
-  to {transform:scale(1);opacity:1;}
-}
-
-.result img {
-  width:200px;
-  border-radius:15px;
-  box-shadow:0 0 20px gold;
+.box {
+  background:#1e293b;
+  padding:20px;
+  border-radius:12px;
+  width:280px;
 }
 
 input {
+  width:90%;
   padding:10px;
-  border-radius:10px;
+  margin-top:10px;
   border:none;
-  margin-top:15px;
+  border-radius:8px;
+}
+
+/* success */
+.success {
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#22c55e;
+  padding:10px 20px;
+  border-radius:10px;
+  display:none;
 }
 </style>
 
@@ -82,57 +108,82 @@ input {
 
 <body>
 
-<h1>🎁 PUBG Crate</h1>
+<h1>🚗 PUBG Shop</h1>
 
-<div class="crate" id="crate">🎁</div>
-
-<button onclick="openCrate()">فتح بكج</button>
-
-<div class="result" id="result">
-  <h2 id="carName"></h2>
-  <img id="carImg">
-  <br>
-  <input id="playerID" placeholder="اكتب ID">
-  <br><br>
-  <button onclick="send()">إرسال</button>
+<div class="balance">
+💰 <span id="coins">1000</span> UC
 </div>
 
+<div class="shop" id="shop"></div>
+
+<!-- popup -->
+<div class="popup" id="popup">
+  <div class="box">
+    <h3 id="carName"></h3>
+    <input id="playerID" placeholder="Player ID">
+    <br><br>
+    <button onclick="confirmBuy()">Confirm</button>
+    <button onclick="closePopup()" style="background:red;margin-top:5px;">Cancel</button>
+  </div>
+</div>
+
+<!-- success -->
+<div class="success" id="successBox"></div>
+
 <script>
+let coins = 1000;
+let selectedPrice = 0;
+let selectedCar = "";
+
+document.getElementById("coins").innerText = coins;
+
 let cars = [
- {name:"Buggy", img:"https://i.imgur.com/8Km9tLL.png"},
- {name:"Dacia", img:"https://i.imgur.com/Vz81P9K.png"},
- {name:"UAZ", img:"https://i.imgur.com/9Q9Z1Zm.png"},
- {name:"Mirado", img:"https://i.imgur.com/tK6sF9F.png"}
+ {name:"Buggy", price:60, img:"https://i.imgur.com/8Km9tLL.png"},
+ {name:"Dacia", price:120, img:"https://i.imgur.com/Vz81P9K.png"},
+ {name:"UAZ", price:180, img:"https://i.imgur.com/9Q9Z1Zm.png"}
 ];
 
-function openCrate(){
-  let crate = document.getElementById("crate");
-  crate.classList.add("spin");
+let shop = document.getElementById("shop");
 
-  setTimeout(()=>{
-    crate.classList.remove("spin");
+cars.forEach(car=>{
+  shop.innerHTML += `
+    <div class="card">
+      <img src="${car.img}">
+      <h3>${car.name}</h3>
+      <p>${car.price} UC</p>
+      <button onclick="openPopup(${car.price},'${car.name}')">شراء</button>
+    </div>
+  `;
+});
 
-    let random = Math.floor(Math.random()*cars.length);
-    let win = cars[random];
-
-    document.getElementById("result").style.display="block";
-    document.getElementById("carName").innerText = "🎉 فزت بـ " + win.name;
-    document.getElementById("carImg").src = win.img;
-
-    window.selectedCar = win.name;
-
-  },2000);
+function openPopup(price,name){
+  selectedPrice = price;
+  selectedCar = name;
+  document.getElementById("popup").style.display="flex";
+  document.getElementById("carName").innerText = name;
 }
 
-function send(){
+function closePopup(){
+  document.getElementById("popup").style.display="none";
+}
+
+function confirmBuy(){
   let id = document.getElementById("playerID").value;
 
-  if(id==""){
-    alert("اكتب ID");
-    return;
-  }
+  if(id=="") return;
 
-  alert("✅ تم إرسال " + selectedCar + " إلى ID: " + id);
+  if(coins >= selectedPrice){
+    coins -= selectedPrice;
+    document.getElementById("coins").innerText = coins;
+
+    closePopup();
+
+    let box = document.getElementById("successBox");
+    box.innerText = "تم إرسال " + selectedCar + " إلى ID: " + id;
+    box.style.display="block";
+
+    setTimeout(()=>{ box.style.display="none"; },2500);
+  }
 }
 </script>
 
